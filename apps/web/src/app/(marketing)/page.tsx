@@ -7,8 +7,8 @@ import { getCities } from "@/lib/api";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Nomadly — Work remotely from anywhere. Built for India.",
-  description: "Visas, costs in ₹, and remote jobs — built for Indian passport holders.",
+  title: "Wanderbase — Work remotely from anywhere.",
+  description: "Visa requirements, cost of living in ₹, and remote jobs — all in one place.",
 };
 
 export const revalidate = 3600;
@@ -194,35 +194,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── HOW IT WORKS ─────────────────────────────────── */}
-      <section className="bg-surface-2 border-t border-border py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <p className="section-eyebrow mb-3">How it works</p>
-            <h2 className="section-title">Plan your move in 3 steps</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 relative">
-            <div className="hidden sm:block absolute top-8 left-[calc(16.67%+2rem)] right-[calc(16.67%+2rem)] h-px"
-              style={{ background: "linear-gradient(90deg, transparent, #C7D2FE, #C7D2FE, transparent)" }} />
-            {[
-              { step: "1", icon: "🌍", title: "Pick a destination", desc: "Browse cities filtered by cost, visa type, internet speed, or continent." },
-              { step: "2", icon: "₹",  title: "Check your numbers", desc: "See rent, food, and transport costs in ₹ — compare against your salary." },
-              { step: "3", icon: "💼", title: "Find remote work",   desc: "Browse remote-first jobs with real salary ranges. Apply directly." },
-            ].map((item) => (
-              <div key={item.step} className="card p-8 text-center relative">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary text-white text-sm font-bold flex items-center justify-center shadow-primary-glow">
-                  {item.step}
-                </div>
-                <div className="text-4xl mb-4 mt-2">{item.icon}</div>
-                <h3 className="font-bold text-text-primary mb-2">{item.title}</h3>
-                <p className="text-text-muted text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ──────────────────────────────────────────── */}
+{/* ── CTA ──────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="gradient-border p-px rounded-3xl" style={{
           background: "linear-gradient(135deg, #4F46E5, #7C3AED, #059669) border-box"

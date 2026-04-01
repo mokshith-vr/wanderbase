@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://nomadly.in";
+const BASE_URL = "https://wanderbase.in";
 
 const CITY_SLUGS = [
   "bali",

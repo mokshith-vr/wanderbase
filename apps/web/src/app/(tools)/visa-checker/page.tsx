@@ -217,7 +217,7 @@ export default function VisaCheckerPage() {
                     day: "numeric", month: "long", year: "numeric",
                   })}
                 </p>
-                <a href={`mailto:data@nomadly.in?subject=Incorrect visa data: ${result.requirement.destination_country_name}`}
+                <a href={`mailto:data@wanderbase.in?subject=Incorrect visa data: ${result.requirement.destination_country_name}`}
                   className="text-xs text-text-muted hover:text-danger transition-colors">
                   Report error
                 </a>

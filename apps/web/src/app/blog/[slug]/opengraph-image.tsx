@@ -2,13 +2,13 @@ import { ImageResponse } from "next/og";
 import { getBlogPost } from "@/lib/blog";
 
 export const runtime = "edge";
-export const alt = "Nomadly Blog";
+export const alt = "Wanderbase Blog";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function Image({ params }: { params: { slug: string } }) {
   const post = getBlogPost(params.slug);
-  const title = post?.title ?? "Nomadly — Guides for Indian Nomads";
+  const title = post?.title ?? "Wanderbase — Guides for Indian Nomads";
   const category = post?.category ?? "Guide";
 
   return new ImageResponse(
@@ -44,7 +44,7 @@ export default function Image({ params }: { params: { slug: string } }) {
             N
           </div>
           <span style={{ color: "#F8FAFC", fontSize: "22px", fontWeight: "700" }}>
-            Nomadly
+            Wanderbase
           </span>
           <span
             style={{
@@ -77,7 +77,7 @@ export default function Image({ params }: { params: { slug: string } }) {
 
         {/* Bottom: domain */}
         <div style={{ color: "#6366F1", fontSize: "18px", fontWeight: "600" }}>
-          nomadly.in · Built for Indian tech workers
+          wanderbase.in · Built for Indian tech workers
         </div>
       </div>
     ),

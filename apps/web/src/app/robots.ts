@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: [],
     },
-    sitemap: "https://nomadly.in/sitemap.xml",
+    sitemap: "https://wanderbase.in/sitemap.xml",
   };
 }

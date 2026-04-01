@@ -1,5 +1,5 @@
 {
-  "name": "@nomadly/web",
+  "name": "@wanderbase/web",
   "version": "0.0.1",
   "scripts": {
     "dev": "next dev -p 3000",

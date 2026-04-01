@@ -10,10 +10,10 @@ function trackEvent(event: string, props?: Record<string, unknown>) {
 export type AffiliatePartner = "safetywing" | "airalo" | "wise" | "nordvpn";
 
 const AFFILIATE_LINKS: Record<AffiliatePartner, string> = {
-  safetywing: "https://safetywing.com/?referenceID=nomadly",
-  airalo: "https://ref.airalo.com/nomadly",
-  wise: "https://wise.com/invite/nomadly",
-  nordvpn: "https://go.nordvpn.net/nomadly",
+  safetywing: "https://safetywing.com/?referenceID=wanderbase",
+  airalo: "https://ref.airalo.com/wanderbase",
+  wise: "https://wise.com/invite/wanderbase",
+  nordvpn: "https://go.nordvpn.net/wanderbase",
 };
 
 export function getAffiliateLink(partner: AffiliatePartner): string {

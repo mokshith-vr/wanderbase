@@ -4,7 +4,14 @@
       "Bash(pnpm add:*)",
       "Bash(cp /c/Users/moksh/OneDrive/Desktop/digital-nomad/supabase/seed.ts /c/Users/moksh/OneDrive/Desktop/digital-nomad/apps/api/src/seed.ts)",
       "Bash(npx tsx:*)",
-      "Bash(ls -la \"c:\\\\Users\\\\moksh\\\\OneDrive\\\\Desktop\\\\digital-nomad\"\" | grep -E \"^d \")"
+      "Bash(ls -la \"c:\\\\Users\\\\moksh\\\\OneDrive\\\\Desktop\\\\digital-nomad\"\" | grep -E \"^d \")",
+      "WebSearch",
+      "WebFetch(domain:www.namecheap.com)",
+      "WebFetch(domain:lookup.icann.org)",
+      "WebFetch(domain:www.godaddy.com)",
+      "Bash(sed -i 's/jobs@nomadly\\\\.in/jobs@wanderbase.in/g' apps/web/src/app/jobs/page.tsx)",
+      "Bash(sed -i 's/Nomadly Jobs/Wanderbase Jobs/g' apps/web/src/lib/blog.ts)",
+      "Bash(sed -i 's/Nomadly v3/Wanderbase v3/g' apps/web/tailwind.config.ts)"
     ]
   }
 }

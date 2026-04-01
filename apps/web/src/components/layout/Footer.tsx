@@ -32,9 +32,9 @@ export function Footer() {
             <Link href="/" className="inline-flex items-center gap-2.5 mb-5 group">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm"
                 style={{ background: "linear-gradient(135deg, #6366F1, #A78BFA)" }}>
-                N
+                W
               </div>
-              <span className="font-black text-lg text-text-primary tracking-tight">Nomadly</span>
+              <span className="font-black text-lg text-text-primary tracking-tight">Wanderbase</span>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed mb-5">
               Built for Indian tech workers who want to live and work from anywhere in the world.
@@ -68,7 +68,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-text-muted text-xs">© 2025 Nomadly. All rights reserved.</p>
+          <p className="text-text-muted text-xs">© 2025 Wanderbase. All rights reserved.</p>
           <p className="text-text-muted text-xs text-center">
             Visa data is verified but{" "}
             <Link href="/disclaimer" className="text-primary/80 hover:text-primary transition-colors">

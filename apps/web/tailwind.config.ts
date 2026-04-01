@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Nomadly v3 — Clean Light Design System
+        // Wanderbase v3 — Clean Light Design System
         background: "#FAFAF8",
         surface: "#FFFFFF",
         "surface-2": "#F5F4F0",

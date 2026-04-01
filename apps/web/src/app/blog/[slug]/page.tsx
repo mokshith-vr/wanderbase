@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.description,
       type: "article",
       publishedTime: post.publishedAt,
-      url: `https://nomadly.in/blog/${post.slug}`,
+      url: `https://wanderbase.in/blog/${post.slug}`,
     },
     twitter: {
       card: "summary_large_image",

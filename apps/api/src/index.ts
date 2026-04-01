@@ -15,8 +15,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://nomadly.in",
-      "https://www.nomadly.in",
+      "https://wanderbase.in",
+      "https://www.wanderbase.in",
     ],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
@@ -59,7 +59,7 @@ serve(
     port: PORT,
   },
   (info) => {
-    console.log(`🚀 Nomadly API running at http://localhost:${info.port}`);
+    console.log(`🚀 Wanderbase API running at http://localhost:${info.port}`);
   }
 );
 

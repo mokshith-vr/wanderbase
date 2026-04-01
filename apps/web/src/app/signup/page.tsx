@@ -60,10 +60,11 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white font-bold">
-              N
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold"
+              style={{ background: "linear-gradient(135deg, #4F46E5, #7C3AED)" }}>
+              W
             </div>
-            <span className="font-bold text-xl text-text-primary">Nomadly</span>
+            <span className="font-bold text-xl text-text-primary">Wanderbase</span>
           </Link>
           <h1 className="text-2xl font-bold text-text-primary">Create your account</h1>
           <p className="text-text-muted mt-1 text-sm">Free forever. No credit card needed.</p>

@@ -364,7 +364,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <ol>
   <li><strong>RemoteOK.com</strong> — Filter by timezone. Best volume of legit remote jobs.</li>
   <li><strong>WeWorkRemotely.com</strong> — Higher quality, less volume</li>
-  <li><strong>Nomadly Jobs</strong> — Our <a href="/jobs">job board</a>, filtered for India-friendly only</li>
+  <li><strong>Wanderbase Jobs</strong> — Our <a href="/jobs">job board</a>, filtered for India-friendly only</li>
   <li><strong>LinkedIn</strong> — Set location to "Remote" and filter carefully</li>
   <li><strong>AngelList/Wellfound</strong> — Startups are more contractor-friendly</li>
 </ol>

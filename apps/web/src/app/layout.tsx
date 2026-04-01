@@ -6,8 +6,8 @@ import { AuthProvider } from "@/components/auth/AuthProvider";
 
 export const metadata: Metadata = {
   title: {
-    default: "Nomadly — Work remotely from anywhere. Built for India.",
-    template: "%s | Nomadly",
+    default: "Wanderbase — Work remotely from anywhere. Built for India.",
+    template: "%s | Wanderbase",
   },
   description:
     "Everything an Indian developer needs to go remote — visas, costs, jobs, and community. Indian-passport-first. Costs shown in ₹.",
@@ -21,15 +21,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://nomadly.in",
-    siteName: "Nomadly",
-    title: "Nomadly — Work remotely from anywhere. Built for India.",
+    url: "https://wanderbase.in",
+    siteName: "Wanderbase",
+    title: "Wanderbase — Work remotely from anywhere. Built for India.",
     description:
       "Visas, costs, and remote jobs — all calibrated for Indian passport holders.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nomadly — Work remotely from anywhere. Built for India.",
+    title: "Wanderbase — Work remotely from anywhere. Built for India.",
     description:
       "Visas, costs, and remote jobs — all calibrated for Indian passport holders.",
   },

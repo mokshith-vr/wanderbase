@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Nomadly City Guide";
+export const alt = "Wanderbase City Guide";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -68,7 +68,7 @@ export default function Image({ params }: { params: { city: string } }) {
             N
           </div>
           <span style={{ color: "#F8FAFC", fontSize: "22px", fontWeight: "700" }}>
-            Nomadly
+            Wanderbase
           </span>
         </div>
 
@@ -116,7 +116,7 @@ export default function Image({ params }: { params: { city: string } }) {
 
         {/* Bottom */}
         <div style={{ color: "#6366F1", fontSize: "18px", fontWeight: "600" }}>
-          nomadly.in · Visa · Cost · Remote Jobs
+          wanderbase.in · Visa · Cost · Remote Jobs
         </div>
       </div>
     ),

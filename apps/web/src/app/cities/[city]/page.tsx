@@ -257,7 +257,7 @@ export default async function CityPage({ params }: PageProps) {
                   })}
                   {" · "}
                   <a
-                    href={`mailto:data@nomadly.in?subject=Incorrect visa data: ${city.country}`}
+                    href={`mailto:data@wanderbase.in?subject=Incorrect visa data: ${city.country}`}
                     className="text-danger hover:underline"
                   >
                     Report incorrect info

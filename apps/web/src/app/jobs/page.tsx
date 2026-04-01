@@ -227,7 +227,7 @@ export default function JobsPage() {
                   Want to post a job? Reach 5,000+ Indian remote workers.
                 </p>
                 <a
-                  href="mailto:jobs@nomadly.in"
+                  href="mailto:jobs@wanderbase.in"
                   className="btn-secondary text-sm inline-block"
                 >
                   Post a job — $49 →

@@ -40,10 +40,11 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-primary-glow"
               style={{ background: "linear-gradient(135deg, #4F46E5, #7C3AED)" }}>
-              N
+              W
             </div>
-            <span className="font-black text-lg text-text-primary tracking-tight group-hover:text-primary transition-colors">
-              Nomadly
+            <span className="font-black text-lg tracking-tight group-hover:text-primary transition-colors"
+              style={{ background: "linear-gradient(135deg, #4F46E5, #7C3AED)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Wanderbase
             </span>
           </Link>
 
