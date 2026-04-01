@@ -1,0 +1,23 @@
+{
+  "name": "@nomadly/api",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.11.1",
+    "@nomadly/types": "workspace:*",
+    "@supabase/supabase-js": "^2.101.1",
+    "hono": "^4.3.11",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "tsx": "^4.15.6",
+    "typescript": "^5.4.5"
+  }
+}

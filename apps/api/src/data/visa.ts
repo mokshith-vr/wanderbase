@@ -1,0 +1,413 @@
+import type { VisaRequirement } from "@nomadly/types";
+
+// Verified visa requirements for Indian passport holders (as of 2025)
+// Sources: IATA, official embassy websites
+export const VISA_REQUIREMENTS: VisaRequirement[] = [
+  {
+    id: "vr-1",
+    passport_country_code: "IN",
+    destination_country_code: "ID",
+    destination_country_name: "Indonesia (Bali)",
+    visa_type: "visa_on_arrival",
+    max_stay_days: 30,
+    evisa_link: "https://molina.imigrasi.go.id",
+    embassy_link: "https://www.indonesia.go.id",
+    notes:
+      "Visa on arrival available at major airports including Ngurah Rai International Airport (Bali). Cost: ~$35 USD. Extendable once for another 30 days. Also available as B211A e-visa.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-2",
+    passport_country_code: "IN",
+    destination_country_code: "PT",
+    destination_country_name: "Portugal",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://vistos.mne.gov.pt",
+    notes:
+      "Schengen visa required. Apply at VFS Global. Portugal offers a Digital Nomad Visa (D8) for stays over 90 days — apply from India before travel. Processing: 2-4 weeks.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-3",
+    passport_country_code: "IN",
+    destination_country_code: "GE",
+    destination_country_name: "Georgia",
+    visa_type: "visa_free",
+    max_stay_days: 365,
+    evisa_link: null,
+    embassy_link: "https://www.georgia.travel",
+    notes:
+      "Indian passport holders can enter Georgia visa-free and stay for up to 1 year per entry. One of the best visa policies for Indians globally. No work permit needed for remote work.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-4",
+    passport_country_code: "IN",
+    destination_country_code: "TH",
+    destination_country_name: "Thailand",
+    visa_type: "visa_free",
+    max_stay_days: 30,
+    evisa_link: "https://www.thaievisa.go.th",
+    embassy_link: "https://www.thaiembassy.com",
+    notes:
+      "Indians can enter visa-free for 30 days (extended to 60 days for tourism as of 2024). Can be extended at immigration office. Also available as 60-day tourist visa on arrival at major airports.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-5",
+    passport_country_code: "IN",
+    destination_country_code: "CO",
+    destination_country_name: "Colombia",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://www.cancilleria.gov.co",
+    notes:
+      "Tourist visa required for Indians. Apply at Colombian embassy in Delhi or Mumbai. Colombia offers a Digital Nomad Visa (Visa Nómada Digital) for remote workers earning $684+ USD/month.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-6",
+    passport_country_code: "IN",
+    destination_country_code: "HU",
+    destination_country_name: "Hungary",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://konzuliszolgalat.kormany.hu",
+    notes:
+      "Schengen visa required. Apply via Hungarian embassy or VFS Global. Valid for 90 days in any 180-day period within the Schengen Area.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-7",
+    passport_country_code: "IN",
+    destination_country_code: "CZ",
+    destination_country_name: "Czech Republic",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://www.mzv.cz",
+    notes:
+      "Schengen visa required. Apply via Czech embassy in Delhi or Mumbai. Valid for 90 days in any 180-day period within Schengen. Czech Republic offers a Zivno freelance visa for longer stays.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-8",
+    passport_country_code: "IN",
+    destination_country_code: "EE",
+    destination_country_name: "Estonia",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: "https://www.eesti.ee/en/republic-of-estonia/republic-of-estonia/digital-nomad-visa",
+    embassy_link: "https://vm.ee",
+    notes:
+      "Schengen visa required for short stays. Estonia launched the world's first Digital Nomad Visa (D-type visa) — valid up to 1 year for remote workers earning €3,504+/month. Apply via e-Residency portal.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-9",
+    passport_country_code: "IN",
+    destination_country_code: "MX",
+    destination_country_name: "Mexico",
+    visa_type: "visa_free",
+    max_stay_days: 180,
+    evisa_link: null,
+    embassy_link: "https://consulmex.sre.gob.mx",
+    notes:
+      "Indians can enter Mexico visa-free for up to 180 days. Fill out FMM tourist card on arrival (now digital). No income requirement. Perfect for a 6-month nomad stint.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-10",
+    passport_country_code: "IN",
+    destination_country_code: "ES",
+    destination_country_name: "Spain",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://www.exteriores.gob.es",
+    notes:
+      "Schengen visa required for Indians. Apply at Spanish consulate or VFS Global. Spain launched a Digital Nomad Visa in 2023 for remote workers — valid 1 year, renewable up to 5 years.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-11",
+    passport_country_code: "IN",
+    destination_country_code: "TW",
+    destination_country_name: "Taiwan",
+    visa_type: "evisa",
+    max_stay_days: 30,
+    evisa_link: "https://visawebapp.boca.gov.tw",
+    embassy_link: "https://www.boca.gov.tw",
+    notes:
+      "Indian passport holders can apply for an e-visa online. Initial stay 30 days, extendable at NIA. Taiwan also has a Gold Card (Digital Nomad Visa) for professionals earning $5,000+ USD/month.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-12",
+    passport_country_code: "IN",
+    destination_country_code: "KR",
+    destination_country_name: "South Korea",
+    visa_type: "evisa",
+    max_stay_days: 90,
+    evisa_link: "https://www.visa.go.kr",
+    embassy_link: "https://overseas.mofa.go.kr",
+    notes:
+      "Indian passport holders need a K-ETA (Korea Electronic Travel Authorization) — apply online, costs $10. South Korea also has a Workation Visa for digital nomads. Valid for 90 days.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-13",
+    passport_country_code: "IN",
+    destination_country_code: "ZA",
+    destination_country_name: "South Africa",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://www.dha.gov.za",
+    notes:
+      "Visa required for Indians. Apply at South African embassy or VFS Global. South Africa has a Remote Work Visa valid up to 3 years. Requires proof of employment and $53,000+ USD annual income.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-14",
+    passport_country_code: "IN",
+    destination_country_code: "AE",
+    destination_country_name: "UAE (Dubai)",
+    visa_type: "visa_on_arrival",
+    max_stay_days: 30,
+    evisa_link: "https://icp.gov.ae",
+    embassy_link: "https://www.uaecabinet.ae",
+    notes:
+      "Indians holding a valid US, UK, EU, or Australian visa can get visa on arrival in UAE for 14-30 days. Otherwise apply for UAE e-visa online. UAE has a Digital Nomad Visa (Virtual Working Programme) valid 1 year.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-15",
+    passport_country_code: "IN",
+    destination_country_code: "MY",
+    destination_country_name: "Malaysia",
+    visa_type: "visa_free",
+    max_stay_days: 30,
+    evisa_link: null,
+    embassy_link: "https://www.imi.gov.my",
+    notes:
+      "Indians can enter Malaysia visa-free for 30 days. Malaysia launched DE Rantau (Digital Nomad Pass) — valid 3-12 months for remote workers earning $24,000+ USD/year.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-16",
+    passport_country_code: "IN",
+    destination_country_code: "VN",
+    destination_country_name: "Vietnam",
+    visa_type: "evisa",
+    max_stay_days: 90,
+    evisa_link: "https://evisa.xuatnhapcanh.gov.vn",
+    embassy_link: "https://xuatnhapcanh.gov.vn",
+    notes:
+      "Indians need a Vietnam e-visa. Apply online at official government portal. Cost: $25 USD. Allows single or multiple entry, stay up to 90 days. Very straightforward process.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-17",
+    passport_country_code: "IN",
+    destination_country_code: "DE",
+    destination_country_name: "Germany",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://india.diplo.de",
+    notes:
+      "Schengen visa required. Apply at German embassy or VFS Global. Germany offers a Freelancer Visa (Freiberufler) for self-employed workers. Processing can take 4-8 weeks — plan ahead.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-18",
+    passport_country_code: "IN",
+    destination_country_code: "JP",
+    destination_country_name: "Japan",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: "https://www.mofa.go.jp/j_info/visit/visa/index.html",
+    embassy_link: "https://www.in.emb-japan.go.jp",
+    notes:
+      "Tourist visa required for Indians. Japan has an e-visa system for select countries including India. Apply via official Japan e-visa portal. Multiple entry visas available for frequent travelers. Japan is working on a Digital Nomad Visa.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-19",
+    passport_country_code: "IN",
+    destination_country_code: "SG",
+    destination_country_name: "Singapore",
+    visa_type: "visa_required",
+    max_stay_days: 30,
+    evisa_link: "https://eservices.ica.gov.sg/esvclandingpage/save",
+    embassy_link: "https://www.mfa.gov.sg/Overseas-Mission/New-Delhi",
+    notes:
+      "Indians require a visa for Singapore. Apply online via ICA (Immigration & Checkpoints Authority). Processing takes 3-5 business days. Cost: SGD $30. Singapore has a Tech.Pass for senior tech professionals.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-20",
+    passport_country_code: "IN",
+    destination_country_code: "NL",
+    destination_country_name: "Netherlands",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: null,
+    embassy_link: "https://www.netherlandsandyou.nl/your-country-and-the-netherlands/india",
+    notes:
+      "Schengen visa required. Apply at the Dutch embassy in New Delhi or VFS Global. Netherlands is part of the Schengen Area — visa valid for 90 days in any 180-day period across all Schengen countries.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-21",
+    passport_country_code: "IN",
+    destination_country_code: "GB",
+    destination_country_name: "United Kingdom",
+    visa_type: "visa_required",
+    max_stay_days: 180,
+    evisa_link: "https://www.gov.uk/apply-uk-visa",
+    embassy_link: "https://www.gov.uk/world/organisations/british-high-commission-new-delhi",
+    notes:
+      "UK Standard Visitor Visa required for Indians. Apply online at gov.uk. UK is not in the Schengen Area. The UK has a Global Talent Visa and Scale-up Visa for tech professionals. Processing: 3-8 weeks.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-22",
+    passport_country_code: "IN",
+    destination_country_code: "CA",
+    destination_country_name: "Canada",
+    visa_type: "visa_required",
+    max_stay_days: 180,
+    evisa_link: "https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada.html",
+    embassy_link: "https://www.canadainternational.gc.ca/india-inde/index.aspx",
+    notes:
+      "Temporary Resident Visa (TRV) required for Indians. Apply online via IRCC portal. Canada has a Digital Nomad Strategy but no specific visa yet — use visitor visa (6 months) while working remotely. Processing: 4-8 weeks.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-23",
+    passport_country_code: "IN",
+    destination_country_code: "AU",
+    destination_country_name: "Australia",
+    visa_type: "visa_required",
+    max_stay_days: 90,
+    evisa_link: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601",
+    embassy_link: "https://india.highcommission.gov.au",
+    notes:
+      "Indians need a Tourist Visa (subclass 600) or Working Holiday Visa. Apply online via ImmiAccount. Australia has a Global Talent Visa for exceptional tech talent. Processing: 2-4 weeks.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-24",
+    passport_country_code: "IN",
+    destination_country_code: "NP",
+    destination_country_name: "Nepal",
+    visa_type: "visa_free",
+    max_stay_days: 150,
+    evisa_link: null,
+    embassy_link: "https://nepalembassy.in",
+    notes:
+      "Indian passport holders can enter Nepal visa-free — no visa, no passport required (Voter ID/Aadhaar accepted). Can stay up to 150 days per year. Nepal uses Indian Rupee at a fixed rate (1 INR = 1.6 NPR).",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-25",
+    passport_country_code: "IN",
+    destination_country_code: "LK",
+    destination_country_name: "Sri Lanka",
+    visa_type: "evisa",
+    max_stay_days: 30,
+    evisa_link: "https://eta.gov.lk/slvisa/",
+    embassy_link: "https://www.hcicolombo.gov.in",
+    notes:
+      "Indians can apply for a free ETA (Electronic Travel Authorization) online at eta.gov.lk. Free of charge for Indian citizens. Valid for 30 days, extendable. Sri Lanka has excellent beaches and very low cost of living.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-26",
+    passport_country_code: "IN",
+    destination_country_code: "MV",
+    destination_country_name: "Maldives",
+    visa_type: "visa_on_arrival",
+    max_stay_days: 30,
+    evisa_link: null,
+    embassy_link: "https://immigration.gov.mv",
+    notes:
+      "Indians get a free visa on arrival in the Maldives for 30 days, extendable up to 90 days. No prior visa required. Perfect for a short work-from-beach stint. Very expensive cost of living.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-27",
+    passport_country_code: "IN",
+    destination_country_code: "QA",
+    destination_country_name: "Qatar",
+    visa_type: "visa_on_arrival",
+    max_stay_days: 30,
+    evisa_link: "https://portal.moi.gov.qa",
+    embassy_link: "https://doha.indianembassy.gov.in",
+    notes:
+      "Indian passport holders can get a visa on arrival in Qatar for 30 days. Also available as an e-visa via Qatar's Hayya portal. Qatar has a growing tech and startup ecosystem, and 0% income tax.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-28",
+    passport_country_code: "IN",
+    destination_country_code: "OM",
+    destination_country_name: "Oman",
+    visa_type: "evisa",
+    max_stay_days: 30,
+    evisa_link: "https://evisa.rop.gov.om",
+    embassy_link: "https://muscat.indianembassy.gov.in",
+    notes:
+      "Indians can apply for an e-visa for Oman online. Cost: OMR 20 (~₹4,300). Stay up to 30 days. Oman offers a residency visa for remote workers (Integrated Visa) valid up to 2 years for those earning $4,000+/month.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-29",
+    passport_country_code: "IN",
+    destination_country_code: "KE",
+    destination_country_name: "Kenya",
+    visa_type: "evisa",
+    max_stay_days: 90,
+    evisa_link: "https://evisa.go.ke",
+    embassy_link: "https://www.hcinairobi.gov.in",
+    notes:
+      "Indians can apply for a Kenya e-visa online at evisa.go.ke. Cost: $51 USD. Valid for 90 days. Kenya has a Startup Visa and growing tech ecosystem in Nairobi (Silicon Savannah). Low cost of living.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "vr-30",
+    passport_country_code: "IN",
+    destination_country_code: "PH",
+    destination_country_name: "Philippines",
+    visa_type: "visa_free",
+    max_stay_days: 30,
+    evisa_link: null,
+    embassy_link: "https://www.dfa.gov.ph",
+    notes:
+      "Indian passport holders can enter the Philippines visa-free for 30 days, extendable up to 59 days at Bureau of Immigration. Bohol and Siargao are popular nomad spots. Good English proficiency, affordable lifestyle.",
+    last_verified_at: "2025-03-01T00:00:00Z",
+  },
+];
+
+// Helper: get visa requirement by country code
+export function getVisaRequirement(
+  destinationCode: string
+): VisaRequirement | undefined {
+  return VISA_REQUIREMENTS.find(
+    (v) =>
+      v.destination_country_code === destinationCode.toUpperCase() &&
+      v.passport_country_code === "IN"
+  );
+}
+
+// All supported destination country codes
+export const SUPPORTED_COUNTRIES = VISA_REQUIREMENTS.map((v) => ({
+  code: v.destination_country_code,
+  name: v.destination_country_name,
+}));

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm add:*)",
+      "Bash(cp /c/Users/moksh/OneDrive/Desktop/digital-nomad/supabase/seed.ts /c/Users/moksh/OneDrive/Desktop/digital-nomad/apps/api/src/seed.ts)",
+      "Bash(npx tsx:*)",
+      "Bash(ls -la \"c:\\\\Users\\\\moksh\\\\OneDrive\\\\Desktop\\\\digital-nomad\"\" | grep -E \"^d \")"
+    ]
+  }
+}
