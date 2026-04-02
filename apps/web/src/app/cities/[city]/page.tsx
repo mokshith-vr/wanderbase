@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { getAffiliateLink } from "@/lib/affiliate";
 import { SaveCityButton } from "@/components/cities/SaveCityButton";
 import type { Metadata } from "next";
+import type { ColivingOption } from "@nomadly/types";
 
 interface PageProps {
   params: { city: string };
@@ -227,6 +228,78 @@ export default async function CityPage({ params }: PageProps) {
               </div>
             )}
           </section>
+
+          {/* Hostels & Colivings */}
+          {city.coliving_options && city.coliving_options.length > 0 && (
+            <section>
+              <h2 className="text-xl font-bold text-text-primary mb-4">
+                🏡 Hostels & Coliving Spaces
+              </h2>
+              <div className="space-y-3">
+                {city.coliving_options.map((opt: ColivingOption) => (
+                  <a
+                    key={opt.name}
+                    href={opt.booking_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="card-hover flex gap-4 p-4 group"
+                  >
+                    {/* Type badge + icon */}
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-xl bg-surface-2">
+                      {opt.type === "coliving" ? "🏘️" : opt.type === "hostel" ? "🛏️" : "🏠"}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="font-semibold text-text-primary group-hover:text-primary text-sm">{opt.name}</p>
+                          <p className="text-xs text-text-muted mt-0.5">{opt.neighborhood}</p>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          {opt.price_per_month_usd && (
+                            <p className="text-sm font-bold text-text-primary">
+                              {formatInr(usdToInr(opt.price_per_month_usd))}<span className="text-xs font-normal text-text-muted">/mo</span>
+                            </p>
+                          )}
+                          {opt.price_per_night_usd && (
+                            <p className="text-sm font-bold text-text-primary">
+                              {formatInr(usdToInr(opt.price_per_night_usd))}<span className="text-xs font-normal text-text-muted">/night</span>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-text-muted mt-1.5 leading-relaxed">{opt.highlight}</p>
+
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                          opt.type === "coliving" ? "bg-primary/10 text-primary" :
+                          opt.type === "hostel" ? "bg-success/10 text-success" :
+                          "bg-warning/10 text-warning"
+                        }`}>
+                          {opt.type}
+                        </span>
+                        {opt.wifi_mbps && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-2 text-text-muted font-medium">
+                            {opt.wifi_mbps} Mbps WiFi
+                          </span>
+                        )}
+                        {opt.includes_desk && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-2 text-text-muted font-medium">
+                            desk included
+                          </span>
+                        )}
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/5 text-primary font-medium ml-auto">
+                          Book ↗
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+              <p className="text-xs text-text-muted mt-3">Prices are estimates · Verify on booking page · We may earn a commission</p>
+            </section>
+          )}
 
           {/* Visa Section */}
           {visa && (

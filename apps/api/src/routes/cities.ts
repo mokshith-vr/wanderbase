@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import { getTeleportData } from "../lib/teleport";
 import { getCityImage } from "../lib/city-images";
 import { CITIES } from "../data/cities";
+import { COLIVING_DATA } from "../data/coliving";
 
 const cities = new Hono();
 
@@ -93,6 +94,7 @@ cities.get("/:slug", async (c) => {
       last_verified_at: visa.last_verified_at,
     } : null,
     accommodation: seedCity?.accommodation ?? null,
+    coliving_options: COLIVING_DATA[slug] ?? [],
     updated_at: city.updated_at,
   }));
 });

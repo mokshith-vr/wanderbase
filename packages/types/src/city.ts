@@ -53,9 +53,24 @@ export const CitySchema = z.object({
 
 export type City = z.infer<typeof CitySchema>;
 
+export const ColivingOptionSchema = z.object({
+  name: z.string(),
+  type: z.enum(["hostel", "coliving", "guesthouse"]),
+  price_per_month_usd: z.number().nullable(),
+  price_per_night_usd: z.number().nullable(),
+  neighborhood: z.string(),
+  wifi_mbps: z.number().nullable(),
+  includes_desk: z.boolean(),
+  booking_url: z.string(),
+  highlight: z.string(),
+});
+
+export type ColivingOption = z.infer<typeof ColivingOptionSchema>;
+
 export const CityDetailSchema = CitySchema.extend({
   costs: CostBreakdownSchema,
   accommodation: AccommodationSchema.optional(),
+  coliving_options: z.array(ColivingOptionSchema).optional(),
   visa: VisaRequirementSchema.nullable(),
   description: z.string(),
   best_for: z.array(z.string()),

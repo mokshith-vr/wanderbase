@@ -14,7 +14,7 @@ import {
 import { getAffiliateLink, trackAffiliateClick } from "@/lib/affiliate";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import type { City, CityDetail } from "@nomadly/types";
+import type { City, CityDetail, ColivingOption } from "@nomadly/types";
 
 const BUDGET_PRESETS = [
   { label: "₹50k", monthly: 50000 },
@@ -24,13 +24,83 @@ const BUDGET_PRESETS = [
   { label: "₹2L", monthly: 200000 },
 ];
 
+type TravelStyle = "backpacker" | "balanced" | "comfortable";
+
+const TRAVEL_STYLES: { id: TravelStyle; label: string; emoji: string; desc: string }[] = [
+  {
+    id: "backpacker",
+    label: "Backpacker",
+    emoji: "🎒",
+    desc: "Hostel room, street food, public transport, café WiFi",
+  },
+  {
+    id: "balanced",
+    label: "Balanced",
+    emoji: "⚖️",
+    desc: "Shared flat, mix of local & restaurant food, 10 days coworking",
+  },
+  {
+    id: "comfortable",
+    label: "Comfortable",
+    emoji: "🛋️",
+    desc: "Studio/1BHK, mostly restaurants, Grab/taxi, full coworking",
+  },
+];
+
+// Style multipliers applied to Numbeo base costs
+// Backpacker: cut rent (shared room ~50%), food (street food ~60%), coworking = 0
+// Balanced: private room in local flat ~75% of Numbeo 1BR, food ~80%, 10 days coworking
+// Comfortable: Numbeo full costs + full coworking membership
+const STYLE_CONFIG: Record<TravelStyle, {
+  rentMultiplier: number;
+  foodMultiplier: number;
+  transportMultiplier: number;
+  coworkingDays: number;
+  accommodationNote: string;
+  foodNote: string;
+}> = {
+  backpacker: {
+    rentMultiplier: 0.45,   // private hostel room or shared flat
+    foodMultiplier: 0.55,   // mostly street food + occasional restaurant
+    transportMultiplier: 0.7,
+    coworkingDays: 0,       // works from cafés
+    accommodationNote: "Hostel private room or shared guesthouse",
+    foodNote: "Street food + local eateries",
+  },
+  balanced: {
+    rentMultiplier: 0.72,   // private room in a local shared flat
+    foodMultiplier: 0.78,   // mix of cooking + restaurants
+    transportMultiplier: 0.85,
+    coworkingDays: 10,
+    accommodationNote: "Private room in local shared flat",
+    foodNote: "Mix of cooking & restaurants",
+  },
+  comfortable: {
+    rentMultiplier: 1.0,    // full 1BR per Numbeo
+    foodMultiplier: 1.0,
+    transportMultiplier: 1.0,
+    coworkingDays: 22,      // full month coworking membership
+    accommodationNote: "1BHK furnished apartment",
+    foodNote: "Mostly restaurants + delivery",
+  },
+};
+
+function estimateCoworkingDayRate(totalUsd: number): number {
+  if (totalUsd <= 800) return 5;
+  if (totalUsd <= 1200) return 8;
+  if (totalUsd <= 1800) return 12;
+  if (totalUsd <= 2500) return 18;
+  return 25;
+}
+
 export default function CostCalculatorPage() {
   const [cities, setCities] = useState<City[]>([]);
   const [selectedCitySlug, setSelectedCitySlug] = useState("");
   const [cityDetail, setCityDetail] = useState<CityDetail | null>(null);
-  const [monthlySalaryInr, setMonthlySalaryInr] = useState<number>(150000);
-  const [salaryInput, setSalaryInput] = useState("1,50,000");
+  const [monthlySalaryInr, setMonthlySalaryInr] = useState<number>(100000);
+  const [salaryInput, setSalaryInput] = useState("1,00,000");
   const [hasCalculated, setHasCalculated] = useState(false);
+  const [travelStyle, setTravelStyle] = useState<TravelStyle>("balanced");
 
   useEffect(() => {
     getCities({ sort: "cost", limit: 20 }).then((res) => {
@@ -61,41 +131,54 @@ export default function CostCalculatorPage() {
 
   const canCalculate = selectedCitySlug && monthlySalaryInr > 0;
 
-  // Calculation results
   const getResults = () => {
-    if (!selectedCity || !hasCalculated) return null;
+    if (!selectedCity || !hasCalculated || !cityDetail?.costs) return null;
 
-    const cityMonthlyInr = usdToInr(selectedCity.monthly_total_budget_usd);
-    const rentInr = usdToInr(
-      Math.round(selectedCity.monthly_total_budget_usd * 0.38)
-    );
-    const foodInr = usdToInr(
-      Math.round(selectedCity.monthly_total_budget_usd * 0.25)
-    );
-    const transportInr = usdToInr(
-      Math.round(selectedCity.monthly_total_budget_usd * 0.07)
-    );
-    const utilitiesInr = usdToInr(
-      Math.round(selectedCity.monthly_total_budget_usd * 0.05)
-    );
-    const otherInr = cityMonthlyInr - rentInr - foodInr - transportInr - utilitiesInr;
+    const { costs } = cityDetail;
+    const style = STYLE_CONFIG[travelStyle];
+    const dayRate = estimateCoworkingDayRate(selectedCity.monthly_total_budget_usd);
 
+    const rentInr = usdToInr(costs.rent_usd * style.rentMultiplier);
+    const foodInr = usdToInr(costs.food_usd * style.foodMultiplier);
+    const transportInr = usdToInr(costs.transport_usd * style.transportMultiplier);
+    const utilitiesInr = usdToInr(costs.utilities_usd);
+    const simInr = usdToInr(12); // ~$12/mo local SIM, consistent across styles
+    const coworkingInr = usdToInr(dayRate * style.coworkingDays);
+
+    const cityMonthlyInr = rentInr + foodInr + transportInr + utilitiesInr + simInr + coworkingInr;
     const affordability = getAffordability(cityMonthlyInr, monthlySalaryInr);
     const savingsInr = monthlySalaryInr - cityMonthlyInr;
 
     const costItems = [
-      { label: "Rent (1BR apt, city centre)", inr: rentInr, color: "primary" as const },
-      { label: "Food & groceries", inr: foodInr, color: "success" as const },
-      { label: "Transport", inr: transportInr, color: "warning" as const },
-      { label: "Utilities & internet", inr: utilitiesInr, color: "danger" as const },
-      { label: "Misc & leisure", inr: otherInr, color: "primary" as const },
+      { label: "Accommodation", sublabel: style.accommodationNote, inr: rentInr, color: "primary" as const },
+      { label: "Food", sublabel: style.foodNote, inr: foodInr, color: "success" as const },
+      { label: "Transport", sublabel: "Local transit + occasional taxi/scooter", inr: transportInr, color: "warning" as const },
+      { label: "Utilities & internet", sublabel: "Electricity, water, home WiFi", inr: utilitiesInr, color: "danger" as const },
+      { label: "SIM / mobile data", sublabel: "Local SIM with data plan", inr: simInr, color: "success" as const },
+      ...(style.coworkingDays > 0 ? [{
+        label: "Coworking space",
+        sublabel: travelStyle === "comfortable"
+          ? "Full monthly membership"
+          : `${style.coworkingDays} day passes/mo · $${dayRate}/day`,
+        inr: coworkingInr,
+        color: "primary" as const,
+      }] : []),
     ];
+
+    // Recommended accommodation from coliving data
+    const colivingOptions = cityDetail.coliving_options ?? [];
+    const recommendedPlace = travelStyle === "backpacker"
+      ? colivingOptions.find((o: ColivingOption) => o.type === "hostel") ?? colivingOptions[0]
+      : travelStyle === "balanced"
+      ? colivingOptions.find((o: ColivingOption) => o.type === "coliving") ?? colivingOptions[0]
+      : colivingOptions[0];
 
     return {
       cityMonthlyInr,
       savingsInr,
       affordability,
       costItems,
+      recommendedPlace,
     };
   };
 
@@ -180,6 +263,33 @@ export default function CostCalculatorPage() {
           </select>
         </div>
 
+        {/* Travel style selector */}
+        <div>
+          <label className="block text-sm font-medium text-text-secondary mb-2">
+            Your travel style
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {TRAVEL_STYLES.map((style) => (
+              <button
+                key={style.id}
+                onClick={() => setTravelStyle(style.id)}
+                className={cn(
+                  "flex flex-col items-center p-3 rounded-xl border text-center transition-all",
+                  travelStyle === style.id
+                    ? "bg-primary/10 border-primary/40 text-primary"
+                    : "bg-surface-2 border-border text-text-secondary hover:border-primary/30"
+                )}
+              >
+                <span className="text-xl mb-1">{style.emoji}</span>
+                <span className="text-xs font-semibold">{style.label}</span>
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-text-muted mt-2">
+            {TRAVEL_STYLES.find((s) => s.id === travelStyle)?.desc}
+          </p>
+        </div>
+
         <Button
           onClick={handleCalculate}
           disabled={!canCalculate}
@@ -247,39 +357,66 @@ export default function CostCalculatorPage() {
             </div>
           </div>
 
-          {/* Accommodation tiers */}
-          {cityDetail?.accommodation && (
-            <div className="card p-6 space-y-3">
-              <h3 className="font-bold text-text-primary">🏠 Where to stay</h3>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-surface-2 rounded-xl p-3 text-center">
-                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">Budget</p>
-                  <p className="text-sm font-bold text-text-primary">{formatInr(usdToInr(cityDetail.accommodation.hostel_per_night_usd * 30))}</p>
-                  <p className="text-[10px] text-text-muted mt-0.5">Hostel/mo</p>
-                </div>
-                <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-center relative">
-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[9px] bg-primary text-white px-1.5 py-0.5 rounded-full font-semibold whitespace-nowrap">Popular</span>
-                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">Mid</p>
-                  <p className="text-sm font-bold text-text-primary">{formatInr(usdToInr(cityDetail.accommodation.airbnb_monthly_usd))}</p>
-                  <p className="text-[10px] text-text-muted mt-0.5">{cityDetail.accommodation.airbnb_available ? "Airbnb/mo" : "Guesthouse/mo"}</p>
-                </div>
-                <div className="bg-surface-2 rounded-xl p-3 text-center">
-                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">Comfort</p>
-                  <p className="text-sm font-bold text-text-primary">{formatInr(usdToInr(cityDetail.accommodation.apartment_monthly_usd))}</p>
-                  <p className="text-[10px] text-text-muted mt-0.5">1BHK lease/mo</p>
-                </div>
+          {/* Recommended place based on travel style */}
+          {results.recommendedPlace && (
+            <div className="card p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-text-primary">🏡 Where to stay</h3>
+                <span className="text-xs text-text-muted">for {TRAVEL_STYLES.find(s => s.id === travelStyle)?.label} style</span>
               </div>
+              <a
+                href={results.recommendedPlace.booking_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-3 p-3 rounded-xl bg-surface-2 hover:bg-primary/5 border border-border hover:border-primary/30 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-surface flex items-center justify-center text-lg flex-shrink-0">
+                  {results.recommendedPlace.type === "coliving" ? "🏘️" : results.recommendedPlace.type === "hostel" ? "🛏️" : "🏠"}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between">
+                    <p className="text-sm font-semibold text-text-primary group-hover:text-primary">{results.recommendedPlace.name}</p>
+                    <p className="text-sm font-bold text-text-primary flex-shrink-0 ml-2">
+                      {results.recommendedPlace.price_per_month_usd
+                        ? `${formatInr(usdToInr(results.recommendedPlace.price_per_month_usd))}/mo`
+                        : results.recommendedPlace.price_per_night_usd
+                        ? `${formatInr(usdToInr(results.recommendedPlace.price_per_night_usd))}/night`
+                        : ""}
+                    </p>
+                  </div>
+                  <p className="text-xs text-text-muted">{results.recommendedPlace.neighborhood}</p>
+                  <p className="text-xs text-text-muted mt-1 leading-relaxed">{results.recommendedPlace.highlight}</p>
+                  <div className="flex gap-2 mt-1.5">
+                    {results.recommendedPlace.wifi_mbps && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface text-text-muted">{results.recommendedPlace.wifi_mbps} Mbps</span>
+                    )}
+                    {results.recommendedPlace.includes_desk && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface text-text-muted">desk included</span>
+                    )}
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary ml-auto">Book ↗</span>
+                  </div>
+                </div>
+              </a>
+              <p className="text-[11px] text-text-muted">
+                Not included in cost above — accommodation is separate from the living cost breakdown.
+              </p>
             </div>
           )}
 
           {/* Cost breakdown */}
           <div className="card p-6 space-y-4">
-            <h3 className="font-bold text-text-primary">Cost breakdown</h3>
+            <div className="flex items-baseline justify-between">
+              <h3 className="font-bold text-text-primary">Cost breakdown</h3>
+              <span className="text-[10px] text-text-muted">Source: Numbeo · verified 2025</span>
+            </div>
             {results.costItems.map((item) => (
               <div key={item.label}>
-                <div className="flex justify-between text-sm mb-1.5">
-                  <span className="text-text-secondary">{item.label}</span>
-                  <span className="font-semibold text-text-primary">
+                <div className="flex justify-between mb-1.5">
+                  <div>
+                    <span className="text-sm text-text-secondary font-medium">{item.label}</span>
+                    <p className="text-[11px] text-text-muted">{item.sublabel}</p>
+                  </div>
+                  <span className="text-sm font-semibold text-text-primary self-start">
                     {formatInr(item.inr)}
                   </span>
                 </div>
@@ -299,31 +436,20 @@ export default function CostCalculatorPage() {
           </div>
 
           {/* Context */}
-          <div className="card p-5">
+          <div className="card p-5 space-y-2">
             <p className="text-text-secondary text-sm leading-relaxed">
               Your monthly budget of{" "}
-              <span className="font-semibold text-text-primary">
-                {formatInr(monthlySalaryInr)}
-              </span>{" "}
-              converted to USD is approximately{" "}
-              <span className="font-semibold text-text-primary">
-                ${Math.round(monthlySalaryInr / 83.5).toLocaleString()}/month
-              </span>
-              . Living in {selectedCity.name} would cost you{" "}
-              <span className="font-semibold text-text-primary">
-                {formatInr(results.cityMonthlyInr)}
-              </span>{" "}
-              — that&apos;s{" "}
-              <span
-                className={
-                  results.savingsInr >= 0 ? "text-success font-semibold" : "text-danger font-semibold"
-                }
-              >
+              <span className="font-semibold text-text-primary">{formatInr(monthlySalaryInr)}</span>{" "}
+              (≈ ${Math.round(monthlySalaryInr / 83.5).toLocaleString()}/mo) vs. living in {selectedCity.name} as a <strong>{travelStyle}</strong> for{" "}
+              <span className="font-semibold text-text-primary">{formatInr(results.cityMonthlyInr)}</span> —{" "}
+              <span className={results.savingsInr >= 0 ? "text-success font-semibold" : "text-danger font-semibold"}>
                 {results.savingsInr >= 0
-                  ? `${Math.round((results.savingsInr / monthlySalaryInr) * 100)}% of your budget saved`
-                  : `${Math.abs(Math.round((results.savingsInr / monthlySalaryInr) * 100))}% more than your budget`}
-              </span>
-              .
+                  ? `you save ${formatInr(results.savingsInr)}/mo`
+                  : `${formatInr(Math.abs(results.savingsInr))}/mo over budget`}
+              </span>.
+            </p>
+            <p className="text-[11px] text-text-muted">
+              Cost figures from Numbeo city averages. Coworking estimated from local market rates. Accommodation not included — see options above.
             </p>
           </div>
 
