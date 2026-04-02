@@ -3,6 +3,7 @@ import { ok, err } from "@nomadly/types";
 import { supabase } from "../lib/supabase";
 import { getTeleportData } from "../lib/teleport";
 import { getCityImage } from "../lib/city-images";
+import { CITIES } from "../data/cities";
 
 const cities = new Hono();
 
@@ -55,6 +56,9 @@ cities.get("/:slug", async (c) => {
 
   if (cityError || !city) return c.json(err(`City not found: ${slug}`), 404);
 
+  // Get accommodation data from seed (not in Supabase yet)
+  const seedCity = CITIES.find((c) => c.slug === slug);
+
   // Fetch Teleport data in parallel with visa/jobs
   const teleportPromise = getTeleportData(slug);
 
@@ -66,11 +70,7 @@ cities.get("/:slug", async (c) => {
     .eq("destination_country_code", city.country_code)
     .single();
 
-  // Get jobs count + Teleport data in parallel
-  const [{ count: jobsCount }, teleport] = await Promise.all([
-    supabase.from("jobs").select("*", { count: "exact", head: true }).eq("india_friendly", true),
-    teleportPromise,
-  ]);
+  const teleport = await teleportPromise;
 
   return c.json(ok({
     ...city,
@@ -92,7 +92,7 @@ cities.get("/:slug", async (c) => {
       notes: visa.notes,
       last_verified_at: visa.last_verified_at,
     } : null,
-    jobs_count: jobsCount ?? 0,
+    accommodation: seedCity?.accommodation ?? null,
     updated_at: city.updated_at,
   }));
 });

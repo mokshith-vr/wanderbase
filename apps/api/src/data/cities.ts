@@ -20,13 +20,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Bali is the top nomad destination in Asia. Cheap cost of living, warm weather year-round, massive expat community, and dozens of coworking spaces in Canggu and Seminyak.",
     best_for: ["Developers", "Designers", "Content creators"],
-    jobs_count: 0,
     costs: {
       rent_usd: 450,
       food_usd: 300,
       transport_usd: 80,
       utilities_usd: 60,
       total_usd: 1200,
+    },
+    accommodation: {
+      hostel_per_night_usd: 18,
+      airbnb_monthly_usd: 650,
+      apartment_monthly_usd: 450,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -50,13 +55,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Lisbon is Europe's most affordable capital and a top choice for Indian techies. Portugal has a dedicated Digital Nomad Visa (D8). Great food, walkable city, and a thriving startup scene.",
     best_for: ["Developers", "PMs", "Designers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 1100,
       food_usd: 500,
       transport_usd: 100,
       utilities_usd: 150,
       total_usd: 2200,
+    },
+    accommodation: {
+      hostel_per_night_usd: 25,
+      airbnb_monthly_usd: 1400,
+      apartment_monthly_usd: 1100,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -80,13 +90,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Georgia is a hidden gem. Indians can stay visa-free for 1 full year. Cost of living is extremely low, food is amazing, and the country has a 1% flat income tax if you register as a business.",
     best_for: ["Developers", "Freelancers", "Data analysts"],
-    jobs_count: 0,
     costs: {
       rent_usd: 350,
       food_usd: 250,
       transport_usd: 50,
       utilities_usd: 60,
       total_usd: 900,
+    },
+    accommodation: {
+      hostel_per_night_usd: 12,
+      airbnb_monthly_usd: 500,
+      apartment_monthly_usd: 350,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -110,13 +125,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Chiang Mai is Asia's original digital nomad city. Low cost, great food, beautiful temples, and a massive nomad community. Thailand offers 30-day visa-free entry for Indian passport holders.",
     best_for: ["Developers", "Writers", "Designers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 380,
       food_usd: 280,
       transport_usd: 80,
       utilities_usd: 60,
       total_usd: 1000,
+    },
+    accommodation: {
+      hostel_per_night_usd: 10,
+      airbnb_monthly_usd: 500,
+      apartment_monthly_usd: 380,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -140,13 +160,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Medellín transformed from the world's most dangerous city to one of the most innovative. Eternal spring climate, low cost, and a growing tech scene. Indians need a visa.",
     best_for: ["Developers", "Entrepreneurs", "Data engineers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 420,
       food_usd: 300,
       transport_usd: 80,
       utilities_usd: 60,
       total_usd: 1100,
+    },
+    accommodation: {
+      hostel_per_night_usd: 15,
+      airbnb_monthly_usd: 600,
+      apartment_monthly_usd: 420,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -170,13 +195,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Budapest is one of Europe's most beautiful and affordable capitals. Fast internet, great food, and a thriving tech community. Part of Schengen — requires Schengen visa for Indians.",
     best_for: ["Developers", "PMs", "Data analysts"],
-    jobs_count: 0,
     costs: {
       rent_usd: 700,
       food_usd: 450,
       transport_usd: 100,
       utilities_usd: 120,
       total_usd: 1600,
+    },
+    accommodation: {
+      hostel_per_night_usd: 20,
+      airbnb_monthly_usd: 900,
+      apartment_monthly_usd: 700,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -200,13 +230,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Prague is a stunning medieval city with a world-class tech scene. High-speed internet, safe streets, and great café culture. Schengen area — requires visa for Indians.",
     best_for: ["Developers", "Designers", "PMs"],
-    jobs_count: 0,
     costs: {
       rent_usd: 850,
       food_usd: 500,
       transport_usd: 120,
       utilities_usd: 150,
       total_usd: 1800,
+    },
+    accommodation: {
+      hostel_per_night_usd: 22,
+      airbnb_monthly_usd: 1100,
+      apartment_monthly_usd: 850,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -230,13 +265,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Estonia is the most digitally advanced country in the world. Built Skype, TransferWise. Has the world's first Digital Nomad Visa. Schengen area — requires Schengen visa for Indians.",
     best_for: ["Developers", "Founders", "Fintech engineers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 850,
       food_usd: 500,
       transport_usd: 100,
       utilities_usd: 150,
       total_usd: 1900,
+    },
+    accommodation: {
+      hostel_per_night_usd: 22,
+      airbnb_monthly_usd: 1100,
+      apartment_monthly_usd: 850,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -260,13 +300,18 @@ export const CITIES: CityDetail[] = [
     description:
       "CDMX is the biggest nomad boom city of 2024. Indians can enter visa-free for 180 days. Great food, vibrant culture, strong tech and startup scene in Roma/Condesa neighborhoods.",
     best_for: ["Developers", "Designers", "Marketers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 550,
       food_usd: 350,
       transport_usd: 80,
       utilities_usd: 80,
       total_usd: 1300,
+    },
+    accommodation: {
+      hostel_per_night_usd: 18,
+      airbnb_monthly_usd: 750,
+      apartment_monthly_usd: 550,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -290,13 +335,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Bangkok is Southeast Asia's megacity — modern, connected, and surprisingly affordable. Great street food, excellent hospitals, and easy access to the rest of Asia.",
     best_for: ["Developers", "PMs", "Data engineers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 450,
       food_usd: 300,
       transport_usd: 100,
       utilities_usd: 80,
       total_usd: 1100,
+    },
+    accommodation: {
+      hostel_per_night_usd: 12,
+      airbnb_monthly_usd: 600,
+      apartment_monthly_usd: 450,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -320,13 +370,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Barcelona is one of Europe's most liveable cities. Beach, mountains, amazing food, and a thriving tech scene. Spain has a Digital Nomad Visa since 2023. Requires Schengen visa for Indians.",
     best_for: ["Developers", "Designers", "Founders"],
-    jobs_count: 0,
     costs: {
       rent_usd: 1300,
       food_usd: 600,
       transport_usd: 120,
       utilities_usd: 150,
       total_usd: 2500,
+    },
+    accommodation: {
+      hostel_per_night_usd: 28,
+      airbnb_monthly_usd: 1600,
+      apartment_monthly_usd: 1300,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -350,13 +405,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Porto is Portugal's second city and even more affordable than Lisbon. Stunning architecture, world-famous port wine, and a quieter pace of life. Same visa rules as Lisbon.",
     best_for: ["Developers", "Writers", "Designers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 900,
       food_usd: 450,
       transport_usd: 100,
       utilities_usd: 120,
       total_usd: 1900,
+    },
+    accommodation: {
+      hostel_per_night_usd: 22,
+      airbnb_monthly_usd: 1100,
+      apartment_monthly_usd: 900,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -380,13 +440,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Taipei has the fastest internet in the world, excellent food, and an incredibly safe environment. Taiwan has an e-visa option for Indians. Strong semiconductor and tech ecosystem.",
     best_for: ["Developers", "Hardware engineers", "Data scientists"],
-    jobs_count: 0,
     costs: {
       rent_usd: 700,
       food_usd: 400,
       transport_usd: 80,
       utilities_usd: 80,
       total_usd: 1600,
+    },
+    accommodation: {
+      hostel_per_night_usd: 20,
+      airbnb_monthly_usd: 900,
+      apartment_monthly_usd: 700,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -410,13 +475,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Seoul is Asia's tech powerhouse. Blazing internet speeds, ultra-modern city, and an exciting culture. South Korea has a Digital Nomad Visa. Indians require a K-ETA or visa.",
     best_for: ["Developers", "Product engineers", "Data scientists"],
-    jobs_count: 0,
     costs: {
       rent_usd: 900,
       food_usd: 500,
       transport_usd: 120,
       utilities_usd: 130,
       total_usd: 2000,
+    },
+    accommodation: {
+      hostel_per_night_usd: 25,
+      airbnb_monthly_usd: 1200,
+      apartment_monthly_usd: 900,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -440,13 +510,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Cape Town is one of the world's most beautiful cities. Table Mountain, beaches, wine country. South Africa has a remote work visa. Safety is a concern — stick to known areas.",
     best_for: ["Developers", "Designers", "Content creators"],
-    jobs_count: 0,
     costs: {
       rent_usd: 500,
       food_usd: 300,
       transport_usd: 100,
       utilities_usd: 80,
       total_usd: 1200,
+    },
+    accommodation: {
+      hostel_per_night_usd: 16,
+      airbnb_monthly_usd: 700,
+      apartment_monthly_usd: 500,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -470,13 +545,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Dubai is the most popular destination for high-earning Indian remote workers. 0% income tax, massive Indian community, and a thriving tech and crypto scene. Premium cost of living.",
     best_for: ["Senior developers", "Fintech engineers", "Founders"],
-    jobs_count: 0,
     costs: {
       rent_usd: 2000,
       food_usd: 700,
       transport_usd: 300,
       utilities_usd: 200,
       total_usd: 3500,
+    },
+    accommodation: {
+      hostel_per_night_usd: 40,
+      airbnb_monthly_usd: 2500,
+      apartment_monthly_usd: 2000,
+      airbnb_available: false,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -500,13 +580,18 @@ export const CITIES: CityDetail[] = [
     description:
       "KL is a fantastic base for Indian nomads — English is widely spoken, food is excellent (lots of Indian food!), and Indians can enter visa-free for 30 days. Modern infrastructure.",
     best_for: ["Developers", "PMs", "Data analysts"],
-    jobs_count: 0,
     costs: {
       rent_usd: 400,
       food_usd: 280,
       transport_usd: 80,
       utilities_usd: 60,
       total_usd: 1000,
+    },
+    accommodation: {
+      hostel_per_night_usd: 14,
+      airbnb_monthly_usd: 550,
+      apartment_monthly_usd: 400,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -530,13 +615,18 @@ export const CITIES: CityDetail[] = [
     description:
       "HCMC (Saigon) is one of Southeast Asia's most exciting cities. Insanely cheap food, fast-growing startup scene, and a buzzing energy. Indians require an e-visa.",
     best_for: ["Developers", "Designers", "Marketers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 350,
       food_usd: 230,
       transport_usd: 60,
       utilities_usd: 60,
       total_usd: 900,
+    },
+    accommodation: {
+      hostel_per_night_usd: 10,
+      airbnb_monthly_usd: 480,
+      apartment_monthly_usd: 350,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -560,13 +650,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Berlin is Europe's startup capital. World-class tech scene, incredible arts and culture, and a very international city. Germany has a Freelancer Visa. Requires Schengen visa for Indians.",
     best_for: ["Developers", "Founders", "Data engineers"],
-    jobs_count: 0,
     costs: {
       rent_usd: 1400,
       food_usd: 700,
       transport_usd: 200,
       utilities_usd: 200,
       total_usd: 2800,
+    },
+    accommodation: {
+      hostel_per_night_usd: 28,
+      airbnb_monthly_usd: 1800,
+      apartment_monthly_usd: 1400,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",
@@ -590,13 +685,18 @@ export const CITIES: CityDetail[] = [
     description:
       "Playa del Carmen is the beach alternative to Mexico City. On the Caribbean coast, with warm weather, turquoise water, and a laid-back nomad community. Indians enter visa-free for 180 days.",
     best_for: ["Developers", "Designers", "Content creators"],
-    jobs_count: 0,
     costs: {
       rent_usd: 500,
       food_usd: 300,
       transport_usd: 80,
       utilities_usd: 80,
       total_usd: 1200,
+    },
+    accommodation: {
+      hostel_per_night_usd: 14,
+      airbnb_monthly_usd: 650,
+      apartment_monthly_usd: 500,
+      airbnb_available: true,
     },
     visa: null,
     updated_at: "2025-03-01T00:00:00Z",

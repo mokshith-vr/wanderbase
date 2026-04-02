@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getCities } from "@/lib/api";
+import { getCities, getCity } from "@/lib/api";
 import {
   formatInr,
   usdToInr,
@@ -14,7 +14,7 @@ import {
 import { getAffiliateLink, trackAffiliateClick } from "@/lib/affiliate";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import type { City } from "@nomadly/types";
+import type { City, CityDetail } from "@nomadly/types";
 
 const BUDGET_PRESETS = [
   { label: "₹50k", monthly: 50000 },
@@ -27,6 +27,7 @@ const BUDGET_PRESETS = [
 export default function CostCalculatorPage() {
   const [cities, setCities] = useState<City[]>([]);
   const [selectedCitySlug, setSelectedCitySlug] = useState("");
+  const [cityDetail, setCityDetail] = useState<CityDetail | null>(null);
   const [monthlySalaryInr, setMonthlySalaryInr] = useState<number>(150000);
   const [salaryInput, setSalaryInput] = useState("1,50,000");
   const [hasCalculated, setHasCalculated] = useState(false);
@@ -51,8 +52,11 @@ export default function CostCalculatorPage() {
     setSalaryInput(monthly.toLocaleString("en-IN"));
   }
 
-  function handleCalculate() {
+  async function handleCalculate() {
+    if (!selectedCitySlug) return;
     setHasCalculated(true);
+    const res = await getCity(selectedCitySlug);
+    if (res.success && res.data) setCityDetail(res.data);
   }
 
   const canCalculate = selectedCitySlug && monthlySalaryInr > 0;
@@ -163,6 +167,7 @@ export default function CostCalculatorPage() {
             onChange={(e) => {
               setSelectedCitySlug(e.target.value);
               setHasCalculated(false);
+              setCityDetail(null);
             }}
             className="input-base"
           >
@@ -241,6 +246,31 @@ export default function CostCalculatorPage() {
               </div>
             </div>
           </div>
+
+          {/* Accommodation tiers */}
+          {cityDetail?.accommodation && (
+            <div className="card p-6 space-y-3">
+              <h3 className="font-bold text-text-primary">🏠 Where to stay</h3>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-surface-2 rounded-xl p-3 text-center">
+                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">Budget</p>
+                  <p className="text-sm font-bold text-text-primary">{formatInr(usdToInr(cityDetail.accommodation.hostel_per_night_usd * 30))}</p>
+                  <p className="text-[10px] text-text-muted mt-0.5">Hostel/mo</p>
+                </div>
+                <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-center relative">
+                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[9px] bg-primary text-white px-1.5 py-0.5 rounded-full font-semibold whitespace-nowrap">Popular</span>
+                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">Mid</p>
+                  <p className="text-sm font-bold text-text-primary">{formatInr(usdToInr(cityDetail.accommodation.airbnb_monthly_usd))}</p>
+                  <p className="text-[10px] text-text-muted mt-0.5">{cityDetail.accommodation.airbnb_available ? "Airbnb/mo" : "Guesthouse/mo"}</p>
+                </div>
+                <div className="bg-surface-2 rounded-xl p-3 text-center">
+                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">Comfort</p>
+                  <p className="text-sm font-bold text-text-primary">{formatInr(usdToInr(cityDetail.accommodation.apartment_monthly_usd))}</p>
+                  <p className="text-[10px] text-text-muted mt-0.5">1BHK lease/mo</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Cost breakdown */}
           <div className="card p-6 space-y-4">

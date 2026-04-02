@@ -48,34 +48,6 @@ const visaRequirements = [
   { passport_country_code: "IN", destination_country_code: "ZA", visa_type: "visa_free", max_stay_days: 30, notes: "Indians get 30 days visa-free in South Africa. Yellow fever vaccination certificate required if coming from endemic countries.", embassy_link: "https://www.dirco.gov.za" },
 ];
 
-const jobs = [
-  { title: "Senior React Developer", company: "GitLab", location_type: "remote", india_friendly: true, salary_min_usd: 8000, salary_max_usd: 12000, tech_stack: ["React", "TypeScript", "GraphQL"], job_url: "https://about.gitlab.com/jobs/", source: "direct", is_featured: true },
-  { title: "Backend Engineer (Go)", company: "Automattic", location_type: "remote", india_friendly: true, salary_min_usd: 7000, salary_max_usd: 10000, tech_stack: ["Go", "MySQL", "Docker"], job_url: "https://automattic.com/work-with-us/", source: "direct", is_featured: true },
-  { title: "Full Stack Developer", company: "Basecamp", location_type: "remote", india_friendly: true, salary_min_usd: 6000, salary_max_usd: 9000, tech_stack: ["Ruby on Rails", "React", "PostgreSQL"], job_url: "https://basecamp.com/about/jobs", source: "direct" },
-  { title: "Data Engineer", company: "Hotjar", location_type: "remote", india_friendly: true, salary_min_usd: 5000, salary_max_usd: 8000, tech_stack: ["Python", "Spark", "Airflow", "BigQuery"], job_url: "https://www.hotjar.com/careers/", source: "direct" },
-  { title: "Python Developer", company: "Doist", location_type: "remote", india_friendly: true, salary_min_usd: 5500, salary_max_usd: 8000, tech_stack: ["Python", "Django", "PostgreSQL"], job_url: "https://doist.com/jobs/", source: "direct" },
-  { title: "Frontend Engineer", company: "Vercel", location_type: "remote", india_friendly: true, salary_min_usd: 7000, salary_max_usd: 11000, tech_stack: ["React", "Next.js", "TypeScript"], job_url: "https://vercel.com/careers", source: "direct", is_featured: true },
-  { title: "DevOps Engineer", company: "Supabase", location_type: "remote", india_friendly: true, salary_min_usd: 6000, salary_max_usd: 9000, tech_stack: ["PostgreSQL", "Docker", "Kubernetes"], job_url: "https://supabase.com/careers", source: "direct" },
-  { title: "Product Designer", company: "Linear", location_type: "remote", india_friendly: true, salary_min_usd: 5000, salary_max_usd: 8000, tech_stack: ["Figma", "Prototyping", "Design Systems"], job_url: "https://linear.app/careers", source: "direct" },
-  { title: "Senior Backend Developer", company: "Lemon Squeezy", location_type: "remote", india_friendly: true, salary_min_usd: 5000, salary_max_usd: 7500, tech_stack: ["Laravel", "PHP", "MySQL"], job_url: "https://www.lemonsqueezy.com/careers", source: "direct" },
-  { title: "React Native Developer", company: "Expo", location_type: "remote", india_friendly: true, salary_min_usd: 5000, salary_max_usd: 8000, tech_stack: ["React Native", "TypeScript", "Expo"], job_url: "https://expo.dev/careers", source: "direct" },
-  { title: "Machine Learning Engineer", company: "Hugging Face", location_type: "remote", india_friendly: true, salary_min_usd: 8000, salary_max_usd: 14000, tech_stack: ["Python", "PyTorch", "Transformers"], job_url: "https://huggingface.co/jobs", source: "direct", is_featured: true },
-  { title: "Site Reliability Engineer", company: "PlanetScale", location_type: "remote", india_friendly: true, salary_min_usd: 7000, salary_max_usd: 10000, tech_stack: ["MySQL", "Go", "Kubernetes"], job_url: "https://planetscale.com/careers", source: "direct" },
-  { title: "TypeScript Engineer", company: "Prisma", location_type: "remote", india_friendly: true, salary_min_usd: 6000, salary_max_usd: 9000, tech_stack: ["TypeScript", "Node.js", "PostgreSQL"], job_url: "https://www.prisma.io/careers", source: "direct" },
-  { title: "Data Scientist", company: "PostHog", location_type: "remote", india_friendly: true, salary_min_usd: 6000, salary_max_usd: 9000, tech_stack: ["Python", "SQL", "ClickHouse"], job_url: "https://posthog.com/careers", source: "direct" },
-  { title: "iOS Developer", company: "Sketch", location_type: "remote", india_friendly: true, salary_min_usd: 5500, salary_max_usd: 8000, tech_stack: ["Swift", "SwiftUI", "Xcode"], job_url: "https://www.sketch.com/careers/", source: "direct" },
-  { title: "Senior Node.js Developer", company: "Strapi", location_type: "remote", india_friendly: true, salary_min_usd: 5000, salary_max_usd: 7500, tech_stack: ["Node.js", "TypeScript", "PostgreSQL"], job_url: "https://strapi.io/careers", source: "direct" },
-  { title: "Android Developer", company: "Bitwarden", location_type: "remote", india_friendly: true, salary_min_usd: 4500, salary_max_usd: 7000, tech_stack: ["Kotlin", "Android", "Jetpack Compose"], job_url: "https://bitwarden.com/careers/", source: "direct" },
-  { title: "Cloud Infrastructure Engineer", company: "Fly.io", location_type: "remote", india_friendly: true, salary_min_usd: 7000, salary_max_usd: 11000, tech_stack: ["Go", "Rust", "Linux", "Networking"], job_url: "https://fly.io/jobs/", source: "direct" },
-  { title: "Frontend Developer", company: "Cal.com", location_type: "remote", india_friendly: true, salary_min_usd: 4000, salary_max_usd: 6500, tech_stack: ["React", "Next.js", "Tailwind CSS"], job_url: "https://cal.com/careers", source: "direct" },
-  { title: "Rust Engineer", company: "Cloudflare", location_type: "remote", india_friendly: true, salary_min_usd: 9000, salary_max_usd: 14000, tech_stack: ["Rust", "WebAssembly", "Networking"], job_url: "https://www.cloudflare.com/careers/", source: "direct", is_featured: true },
-  { title: "Backend Python Engineer", company: "Sentry", location_type: "remote", india_friendly: true, salary_min_usd: 6000, salary_max_usd: 9000, tech_stack: ["Python", "Django", "Kafka", "Redis"], job_url: "https://sentry.io/careers/", source: "direct" },
-  { title: "Staff Frontend Engineer", company: "Netlify", location_type: "remote", india_friendly: true, salary_min_usd: 9000, salary_max_usd: 13000, tech_stack: ["React", "TypeScript", "GraphQL"], job_url: "https://www.netlify.com/careers/", source: "direct" },
-  { title: "Platform Engineer", company: "Render", location_type: "remote", india_friendly: true, salary_min_usd: 7000, salary_max_usd: 10000, tech_stack: ["Go", "Kubernetes", "PostgreSQL"], job_url: "https://render.com/careers", source: "direct" },
-  { title: "UX Engineer", company: "Intercom", location_type: "remote", india_friendly: true, salary_min_usd: 5500, salary_max_usd: 8500, tech_stack: ["React", "Ember.js", "Figma"], job_url: "https://www.intercom.com/careers", source: "direct" },
-  { title: "Security Engineer", company: "1Password", location_type: "remote", india_friendly: true, salary_min_usd: 8000, salary_max_usd: 12000, tech_stack: ["Go", "Rust", "Cryptography"], job_url: "https://1password.com/careers/", source: "direct" },
-];
-
 async function seed() {
   console.log("Seeding cities...");
   const { error: citiesError } = await supabase.from("cities").upsert(cities, { onConflict: "slug" });
@@ -86,11 +58,6 @@ async function seed() {
   const { error: visaError } = await supabase.from("visa_requirements").upsert(visaRequirements, { onConflict: "passport_country_code,destination_country_code" });
   if (visaError) { console.error("Visa error:", visaError); process.exit(1); }
   console.log(`✓ ${visaRequirements.length} visa entries seeded`);
-
-  console.log("Seeding jobs...");
-  const { error: jobsError } = await supabase.from("jobs").upsert(jobs, { onConflict: "job_url" });
-  if (jobsError) { console.error("Jobs error:", jobsError); process.exit(1); }
-  console.log(`✓ ${jobs.length} jobs seeded`);
 
   console.log("\n✅ All data seeded successfully!");
 }

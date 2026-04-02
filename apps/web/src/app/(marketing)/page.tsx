@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Wanderbase — Work remotely from anywhere.",
-  description: "Visa requirements, cost of living in ₹, and remote jobs — all in one place.",
+  description: "Visa requirements, cost of living in ₹, and accommodation options — all in one place.",
 };
 
 export const revalidate = 3600;
@@ -34,15 +34,15 @@ const FEATURES = [
     emoji: "₹",
     bg: "bg-success-light",
     color: "text-success",
-    title: "Every cost in rupees",
-    desc: "See rent, food, and transport in ₹ so you can compare directly against your salary. No conversion math.",
+    title: "Real costs in ₹",
+    desc: "See rent, food, transport, and accommodation options in ₹ — budget, mid, and comfort tiers for every city.",
   },
   {
-    emoji: "💼",
+    emoji: "🏠",
     bg: "bg-warning-light",
     color: "text-warning",
-    title: "Jobs that hire Indians",
-    desc: "Curated remote-first job listings with real salary ranges. Filter by tech stack and apply directly.",
+    title: "Where to stay",
+    desc: "Hostel, Airbnb, or long-term lease — we show all 3 tiers per city so you know exactly what to budget before you land.",
   },
 ];
 
@@ -102,7 +102,7 @@ export default async function HomePage() {
             {[
               { icon: "✓", text: "Verified visa data" },
               { icon: "✓", text: "Costs in ₹" },
-              { icon: "✓", text: "Remote jobs" },
+              { icon: "✓", text: "Accommodation tiers" },
               { icon: "✓", text: "Always up to date" },
             ].map((item) => (
               <span key={item.text} className="flex items-center gap-1.5">
@@ -152,7 +152,7 @@ export default async function HomePage() {
             <p className="section-eyebrow mb-3">Tools</p>
             <h2 className="section-title">Everything in one place</h2>
             <p className="section-subtitle max-w-xl mx-auto">
-              Visa rules, cost of living, and remote jobs — all in one place.
+              Visa rules, cost of living, and accommodation options — all in one place.
             </p>
           </div>
 

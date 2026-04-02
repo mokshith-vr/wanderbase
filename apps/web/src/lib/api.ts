@@ -2,7 +2,6 @@ import type {
   ApiResponse,
   City,
   CityDetail,
-  Job,
   VisaCheckResponse,
 } from "@nomadly/types";
 
@@ -71,26 +70,3 @@ export async function getCity(
   return apiFetch<CityDetail>(`/cities/${slug}`);
 }
 
-// Jobs
-export async function getJobs(params?: {
-  stack?: string;
-  min_salary?: number;
-  india_friendly?: boolean;
-  page?: number;
-  limit?: number;
-}): Promise<ApiResponse<Job[]>> {
-  const query = new URLSearchParams();
-  if (params?.stack) query.set("stack", params.stack);
-  if (params?.min_salary) query.set("min_salary", String(params.min_salary));
-  if (params?.india_friendly !== undefined)
-    query.set("india_friendly", String(params.india_friendly));
-  if (params?.page) query.set("page", String(params.page));
-  if (params?.limit) query.set("limit", String(params.limit));
-
-  const qs = query.toString() ? `?${query.toString()}` : "";
-  return apiFetch<Job[]>(`/jobs${qs}`);
-}
-
-export async function getJob(id: string): Promise<ApiResponse<Job>> {
-  return apiFetch<Job>(`/jobs/${id}`);
-}

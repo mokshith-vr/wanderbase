@@ -24,6 +24,15 @@ export const CostBreakdownSchema = z.object({
 
 export type CostBreakdown = z.infer<typeof CostBreakdownSchema>;
 
+export const AccommodationSchema = z.object({
+  hostel_per_night_usd: z.number(),      // private room in hostel/guesthouse
+  airbnb_monthly_usd: z.number(),        // monthly equivalent of weekly Airbnb
+  apartment_monthly_usd: z.number(),     // 1BHK furnished, monthly lease
+  airbnb_available: z.boolean(),
+});
+
+export type Accommodation = z.infer<typeof AccommodationSchema>;
+
 export const CitySchema = z.object({
   id: z.string(),
   slug: z.string(),
@@ -46,8 +55,8 @@ export type City = z.infer<typeof CitySchema>;
 
 export const CityDetailSchema = CitySchema.extend({
   costs: CostBreakdownSchema,
+  accommodation: AccommodationSchema.optional(),
   visa: VisaRequirementSchema.nullable(),
-  jobs_count: z.number(),
   description: z.string(),
   best_for: z.array(z.string()),
   updated_at: z.string(),

@@ -121,8 +121,8 @@ export function DashboardClient({ user, savedCities }: Props) {
           {[
             { label: "Visa Checker", href: "/visa-checker", icon: "🛂" },
             { label: "Cost Calculator", href: "/cost-calculator", icon: "₹" },
-            { label: "Remote Jobs", href: "/jobs", icon: "💼" },
             { label: "Explore Cities", href: "/cities", icon: "🌍" },
+            { label: "Blog", href: "/blog", icon: "📖" },
           ].map((item) => (
             <Link
               key={item.href}

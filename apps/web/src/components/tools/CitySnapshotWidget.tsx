@@ -2,13 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { checkVisa, getCity, getJobs } from "@/lib/api";
+import { checkVisa, getCity } from "@/lib/api";
 import { formatInr, usdToInr, cn } from "@/lib/utils";
 import { getAffiliateLink, trackAffiliateClick } from "@/lib/affiliate";
 import { VisaBadge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { CityDetail, VisaCheckResponse, Job } from "@nomadly/types";
+import type { CityDetail, VisaCheckResponse } from "@nomadly/types";
 
 // Top cities for autocomplete
 const POPULAR_CITIES = [
@@ -49,7 +49,6 @@ type SnapshotState = "idle" | "loading" | "loaded" | "error";
 interface SnapshotData {
   city: CityDetail;
   visa: VisaCheckResponse | null;
-  jobs: Job[];
 }
 
 export function CitySnapshotWidget() {
@@ -94,22 +93,17 @@ export function CitySnapshotWidget() {
     setError(null);
 
     try {
-      const [cityRes, jobsRes] = await Promise.all([
-        getCity(city.slug),
-        getJobs({ india_friendly: true, limit: 25 }),
-      ]);
+      const cityRes = await getCity(city.slug);
 
       if (!cityRes.success || !cityRes.data) {
         throw new Error(cityRes.error || "City not found");
       }
 
-      // Fetch visa separately using city's country code
       const visaRes = await checkVisa(cityRes.data.country_code);
 
       setData({
         city: cityRes.data,
         visa: visaRes.success && visaRes.data ? visaRes.data : null,
-        jobs: jobsRes.data || [],
       });
       setState("loaded");
     } catch (e) {
@@ -233,14 +227,9 @@ export function CitySnapshotWidget() {
         <div className="mt-6 space-y-4 animate-slide-up">
           {/* Results grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Visa Card */}
             <VisaCard visa={data.visa} cityName={data.city.name} countryCode={data.city.country_code} />
-
-            {/* Cost Card */}
             <CostCard city={data.city} />
-
-            {/* Jobs Card */}
-            <JobsCard jobs={data.jobs} cityName={data.city.name} />
+            <AccommodationCard city={data.city} />
           </div>
 
           {/* Affiliate strip */}
@@ -390,47 +379,41 @@ function CostCard({ city }: { city: CityDetail }) {
         href={`/cost-calculator`}
         className="text-xs text-primary hover:underline block pt-1"
       >
-        Calculate with your salary →
+        Calculate with your budget →
       </Link>
     </div>
   );
 }
 
-function JobsCard({ jobs, cityName }: { jobs: Job[]; cityName: string }) {
-  const count = jobs.length;
-  const topStacks = Array.from(
-    new Set(jobs.flatMap((j) => j.tech_stack).slice(0, 6))
-  ).slice(0, 3);
-
+function AccommodationCard({ city }: { city: CityDetail }) {
+  const acc = city.accommodation;
+  if (!acc) {
+    return (
+      <div className="card p-5">
+        <p className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">🏠 Where to Stay</p>
+        <p className="text-text-muted text-sm">Accommodation data coming soon</p>
+      </div>
+    );
+  }
   return (
     <div className="card p-5 space-y-3">
-      <p className="text-xs font-semibold text-text-muted uppercase tracking-wide">
-        💼 Remote Jobs
-      </p>
-
-      <div>
-        <p className="text-2xl font-bold text-text-primary">{count}</p>
-        <p className="text-text-muted text-xs">India-friendly jobs open</p>
-      </div>
-
-      {topStacks.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {topStacks.map((stack) => (
-            <span
-              key={stack}
-              className="text-xs px-2 py-0.5 rounded-full bg-surface-2 text-text-secondary border border-border"
-            >
-              {stack}
-            </span>
-          ))}
+      <p className="text-xs font-semibold text-text-muted uppercase tracking-wide">🏠 Where to Stay</p>
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-text-muted">Hostel/night</span>
+          <span className="text-sm font-semibold text-text-primary">${acc.hostel_per_night_usd}</span>
         </div>
-      )}
-
-      <Link
-        href="/jobs"
-        className="btn-primary text-xs py-2 w-full justify-center block text-center"
-      >
-        Browse all jobs →
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-text-muted">{acc.airbnb_available ? "Airbnb" : "Guesthouse"}/mo</span>
+          <span className="text-sm font-semibold text-primary">${acc.airbnb_monthly_usd} <span className="text-text-muted font-normal">Popular</span></span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-text-muted">1BHK lease/mo</span>
+          <span className="text-sm font-semibold text-text-primary">${acc.apartment_monthly_usd}</span>
+        </div>
+      </div>
+      <Link href={`/cities/${city.slug}`} className="text-xs text-primary hover:underline block pt-1">
+        Full city guide →
       </Link>
     </div>
   );

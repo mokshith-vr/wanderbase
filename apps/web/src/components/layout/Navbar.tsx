@@ -10,7 +10,6 @@ const NAV_ITEMS = [
   { label: "Explore", href: "/cities" },
   { label: "Visa Checker", href: "/visa-checker" },
   { label: "Cost Calculator", href: "/cost-calculator" },
-  { label: "Jobs", href: "/jobs" },
   { label: "Blog", href: "/blog" },
 ];
 

@@ -4,7 +4,6 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import visa from "./routes/visa";
 import cities from "./routes/cities";
-import jobs from "./routes/jobs";
 
 const app = new Hono();
 
@@ -35,7 +34,6 @@ app.get("/health", (c) => {
 // Routes
 app.route("/visa", visa);
 app.route("/cities", cities);
-app.route("/jobs", jobs);
 
 // 404 handler
 app.notFound((c) => {

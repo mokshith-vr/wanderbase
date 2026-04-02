@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getCity, getJobs } from "@/lib/api";
+import { getCity } from "@/lib/api";
 import { formatInr, usdToInr, formatUsd } from "@/lib/utils";
 import { VisaBadge } from "@/components/ui/badge";
 import { Flag } from "@/components/ui/flag";
 import { Progress } from "@/components/ui/progress";
-import { JobCard } from "@/components/jobs/JobCard";
 import { getAffiliateLink } from "@/lib/affiliate";
 import { SaveCityButton } from "@/components/cities/SaveCityButton";
 import type { Metadata } from "next";
@@ -25,26 +24,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
   const city = res.data;
   return {
-    title: `${city.name} for Indian Nomads — Visa, Cost & Jobs`,
-    description: `Indian passport visa status, cost of living in ₹, and remote jobs for ${city.name}, ${city.country}. ${city.description.slice(0, 120)}`,
+    title: `${city.name} — Visa, Cost of Living & Nomad Guide`,
+    description: `Visa requirements, cost of living in ₹, accommodation, and nomad info for ${city.name}, ${city.country}. ${city.description.slice(0, 100)}`,
   };
 }
 
 export default async function CityPage({ params }: PageProps) {
-  const [cityRes, jobsRes] = await Promise.all([
-    getCity(params.city),
-    getJobs({ india_friendly: true, limit: 5 }),
-  ]);
+  const cityRes = await getCity(params.city);
 
   if (!cityRes.success || !cityRes.data) {
     notFound();
   }
 
   const city = cityRes.data;
-  const jobs = jobsRes.data || [];
   const { costs, visa } = city;
 
   const totalInr = usdToInr(city.monthly_total_budget_usd);
+  const acc = city.accommodation;
 
   const costItems = [
     { label: "Rent (1BR, city centre)", usd: costs.rent_usd },
@@ -195,8 +191,41 @@ export default async function CityPage({ params }: PageProps) {
               href={`/cost-calculator?city=${city.slug}`}
               className="mt-3 inline-block text-sm text-primary hover:underline"
             >
-              Calculate with your salary →
+              Calculate with your budget →
             </Link>
+
+            {/* Accommodation tiers */}
+            {acc && (
+              <div className="mt-4">
+                <h3 className="text-sm font-semibold text-text-secondary mb-3">🏠 Where to stay</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="bg-surface-2 rounded-xl p-4 border border-border">
+                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-1">Budget</p>
+                    <p className="text-base font-bold text-text-primary">{formatInr(usdToInr(acc.hostel_per_night_usd * 30))}</p>
+                    <p className="text-xs text-text-muted mt-0.5">Hostel private room</p>
+                    <p className="text-xs text-success mt-1">{formatUsd(acc.hostel_per_night_usd)}/night</p>
+                  </div>
+                  <div className="bg-surface-2 rounded-xl p-4 border border-primary/20 relative">
+                    <span className="absolute -top-2 left-3 text-[10px] bg-primary text-white px-2 py-0.5 rounded-full font-semibold">Popular</span>
+                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-1">Mid</p>
+                    <p className="text-base font-bold text-text-primary">{formatInr(usdToInr(acc.airbnb_monthly_usd))}</p>
+                    <p className="text-xs text-text-muted mt-0.5">
+                      {acc.airbnb_available ? "Airbnb / serviced apt" : "Guesthouse / hotel"}
+                    </p>
+                    <p className="text-xs text-success mt-1">/month</p>
+                  </div>
+                  <div className="bg-surface-2 rounded-xl p-4 border border-border">
+                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-1">Comfort</p>
+                    <p className="text-base font-bold text-text-primary">{formatInr(usdToInr(acc.apartment_monthly_usd))}</p>
+                    <p className="text-xs text-text-muted mt-0.5">1BHK furnished lease</p>
+                    <p className="text-xs text-success mt-1">/month</p>
+                  </div>
+                </div>
+                {!acc.airbnb_available && (
+                  <p className="text-xs text-warning mt-2">⚠️ Airbnb has limited availability in {city.country} — book via local agencies or Booking.com</p>
+                )}
+              </div>
+            )}
           </section>
 
           {/* Visa Section */}
@@ -291,24 +320,6 @@ export default async function CityPage({ params }: PageProps) {
             </div>
           </section>
 
-          {/* Jobs Section */}
-          {jobs.length > 0 && (
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-text-primary">
-                  💼 Remote Jobs
-                </h2>
-                <Link href="/jobs" className="text-sm text-primary hover:underline">
-                  See all jobs →
-                </Link>
-              </div>
-              <div className="space-y-3">
-                {jobs.map((job) => (
-                  <JobCard key={job.id} job={job} />
-                ))}
-              </div>
-            </section>
-          )}
         </div>
 
         {/* Sidebar */}

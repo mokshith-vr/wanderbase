@@ -5,7 +5,6 @@ const FOOTER_LINKS = {
     { label: "Visa Checker", href: "/visa-checker" },
     { label: "Cost Calculator", href: "/cost-calculator" },
     { label: "City Explorer", href: "/cities" },
-    { label: "Job Board", href: "/jobs" },
   ],
   Company: [
     { label: "About", href: "/about" },
@@ -37,12 +36,12 @@ export function Footer() {
               <span className="font-black text-lg text-text-primary tracking-tight">Wanderbase</span>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed mb-5">
-              Built for Indian tech workers who want to live and work from anywhere in the world.
+              Plan your move. Live anywhere. Work everywhere.
             </p>
             <p className="text-text-muted text-xs flex items-center gap-1.5">
               <span>Made with</span>
               <span className="text-danger">♥</span>
-              <span>for Indian nomads</span>
+              <span>for digital nomads</span>
             </p>
           </div>
 

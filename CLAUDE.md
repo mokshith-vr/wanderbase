@@ -1,7 +1,7 @@
-# CLAUDE.md — Nomadly Platform
+# CLAUDE.md — Wanderbase Platform
 
-> Built for Indian tech workers who want to work remotely from anywhere in the world.
-> Think: Groww for digital nomads. Clean. Fast. Trustworthy. India-first.
+> A full nomad companion — plan your move AND use it on the ground.
+> Visa requirements, cost of living in ₹, coworking spaces, SIM cards, neighborhoods, and remote jobs — all in one place.
 
 ---
 
@@ -43,44 +43,47 @@ pnpm typecheck
 | Components | Custom (shadcn-inspired, owned in codebase) | No version lock-in, full control |
 | Backend | Hono + Node.js | TypeScript-first, fast, edge-ready |
 | Shared types | `packages/types` with Zod | One source of truth, validated at runtime |
-| Database | Supabase (PostgreSQL) — Phase 3 | Free tier, built-in Auth, RLS |
-| Cache | Upstash Redis — Phase 3 | Serverless, pay-per-request |
-| ORM | Prisma — Phase 3 | TypeScript-native, auto-typed client |
+| Database | Supabase (PostgreSQL) ✅ LIVE | Free tier, built-in Auth, RLS |
+| Auth | Supabase Auth + Google OAuth ✅ LIVE | Cookie-based sessions via @supabase/ssr |
 | Monorepo | pnpm workspaces + Turborepo | Parallel builds, shared cache |
-| Deploy | Vercel (web) + Railway (api) | Zero-config, free tiers |
+| Deploy | Vercel (web) + Railway (api) — pending | Zero-config, free tiers |
 
 ---
 
 ## Design System
 
-### Color Tokens (tailwind.config.ts)
+### Color Tokens — Light Theme (tailwind.config.ts)
 
 | Token | Hex | Usage |
 |---|---|---|
-| `background` | `#0F172A` | Page background (navy) |
-| `surface` | `#1E293B` | Card backgrounds |
-| `surface-2` | `#334155` | Inputs, tag backgrounds |
-| `primary` | `#6366F1` | Buttons, links, active states |
+| `background` | `#FAFAF8` | Page background (warm white) |
+| `surface` | `#FFFFFF` | Card backgrounds |
+| `surface-2` | `#F5F4F0` | Inputs, tag backgrounds |
+| `primary` | `#4F46E5` | Buttons, links, active states |
 | `success` | `#10B981` | Visa-free badge, positive |
 | `warning` | `#F59E0B` | e-Visa, caution states |
 | `danger` | `#EF4444` | Visa required, errors |
-| `text-primary` | `#F8FAFC` | Main text |
-| `text-muted` | `#94A3B8` | Secondary/hint text |
-| `border` | `#334155` | Card/input borders |
+| `text-primary` | `#111827` | Main text |
+| `text-secondary` | `#374151` | Secondary text |
+| `text-muted` | `#6B7280` | Hint text |
+| `border` | `#E5E7EB` | Card/input borders |
 
 ### Typography
 - Font: Inter (Google Fonts)
-- Headings: `font-bold tracking-tight`
+- Headings: `font-black tracking-tight` (hero), `font-bold` (sections)
 - Body: `font-normal leading-relaxed`
 
 ### Component Classes (globals.css)
-- `.card` — surface bg + rounded-xl + border
-- `.card-hover` — card + hover:border-primary/50 transition
-- `.btn-primary` — indigo button
-- `.btn-secondary` — surface-2 button
+- `.card` — white bg + rounded-xl + border + shadow-sm
+- `.card-hover` — card + hover lifts with indigo border glow
+- `.btn-primary` — indigo→violet gradient with glow shadow
+- `.btn-secondary` — white with border, hover indigo tint
 - `.input-base` — styled input/select
 - `.badge-success/warning/danger/neutral` — status badges
-- `.skeleton` — animate-pulse placeholder
+- `.skeleton` — shimmer animation placeholder
+- `.section-eyebrow` — small uppercase label above section titles
+- `.section-title` — large bold section heading
+- `.text-gradient` — indigo→violet gradient text
 
 ---
 
@@ -91,9 +94,13 @@ pnpm typecheck
 | `/` | SSG (revalidate 1h) | `app/(marketing)/page.tsx` |
 | `/visa-checker` | CSR | `app/(tools)/visa-checker/page.tsx` |
 | `/cost-calculator` | CSR | `app/(tools)/cost-calculator/page.tsx` |
-| `/jobs` | CSR (SSR in prod) | `app/jobs/page.tsx` |
+| `/jobs` | CSR | `app/jobs/page.tsx` |
 | `/cities` | CSR | `app/cities/page.tsx` |
 | `/cities/[city]` | ISR (revalidate 24h) | `app/cities/[city]/page.tsx` |
+| `/dashboard` | SSR (auth required) | `app/dashboard/page.tsx` |
+| `/login` | CSR | `app/login/page.tsx` |
+| `/blog` | SSG | `app/blog/page.tsx` |
+| `/blog/[slug]` | SSG | `app/blog/[slug]/page.tsx` |
 
 ---
 
@@ -107,18 +114,18 @@ All responses follow `ApiResponse<T>` from `packages/types/src/api.ts`:
 | Method | Route | Description |
 |---|---|---|
 | GET | `/health` | Uptime check |
-| GET | `/visa/check?from=IN&to=:code` | Visa requirement for Indian passport |
+| GET | `/visa/check?from=IN&to=:code` | Visa requirement check |
 | GET | `/visa/countries` | All supported destination countries |
 | GET | `/cities` | Paginated cities (`?continent=Asia&sort=cost`) |
 | GET | `/cities/:slug` | Full city detail with visa + jobs count |
-| GET | `/jobs` | Paginated jobs (`?stack=react&min_salary=5000&india_friendly=true`) |
+| GET | `/jobs` | Paginated jobs (`?stack=react&min_salary=5000`) |
 | GET | `/jobs/:id` | Single job detail |
 
 ---
 
 ## Shared Types (packages/types)
 
-Import from `@nomadly/types` in both apps:
+Import from `@nomadly/types` in both apps (package name stays `@nomadly/types`):
 
 ```ts
 import type { City, CityDetail, Job, VisaRequirement, ApiResponse } from "@nomadly/types"
@@ -134,26 +141,33 @@ Key types:
 
 ---
 
-## Seed Data (Phase 1 — Mock)
+## Seed Data (current — Mock + Supabase hybrid)
 
-All data is hardcoded in `apps/api/src/data/`:
-
+Hardcoded in `apps/api/src/data/`:
 - **20 cities**: Bali, Lisbon, Tbilisi, Chiang Mai, Medellín, Budapest, Prague, Tallinn, Mexico City, Bangkok, Barcelona, Porto, Taipei, Seoul, Cape Town, Dubai, Kuala Lumpur, Ho Chi Minh City, Berlin, Playa del Carmen
-- **17 visa entries**: Indian passport requirements for all 20 destinations (verified 2025)
-- **25 jobs**: Mix of React, Python, Go, Data Engineering, Design roles — all india_friendly: true
+- **17 visa entries**: Passport requirements for all 20 destinations (verified 2025)
+- **25 jobs**: Mix of React, Python, Go, Data Engineering, Design roles
+
+Supabase DB live with: cities table (20 rows + image_url), visa_requirements, jobs, users, saved_cities.
 
 ---
 
 ## Key Components
 
 ### CitySnapshotWidget (`components/tools/CitySnapshotWidget.tsx`)
-The primary product hook. Search box → city autocomplete → parallel fetch of visa + cost + jobs → 3 result cards. Never shows blank state — skeleton loaders always shown while loading.
+Search box → city autocomplete → parallel fetch of visa + cost + jobs → 3 result cards. Never blank — skeletons always shown while loading.
 
 ### CityCard (`components/cities/CityCard.tsx`)
-City grid card: flag, name, visa badge, monthly cost in ₹, internet/safety/english stats.
+City grid card: city photo (h-44), flag emoji, city name, monthly cost in ₹, internet/safety/english stats.
+
+### SaveCityButton (`components/cities/SaveCityButton.tsx`)
+Auth-aware save/unsave toggle. Stores in Supabase `saved_cities` table.
+
+### AuthProvider (`components/auth/AuthProvider.tsx`)
+Global auth context. Exposes `user`, `session`, `loading`, `signOut` via `useAuth()` hook.
 
 ### JobCard (`components/jobs/JobCard.tsx`)
-Job listing card: company, title, tech stack tags, salary in USD + ₹, India-friendly badge, apply button.
+Job listing card: company, title, tech stack tags, salary in USD + ₹, apply button.
 
 ---
 
@@ -164,23 +178,44 @@ Job listing card: company, title, tech stack tags, salary in USD + ₹, India-fr
 | `api.ts` | Typed fetch client for Hono API |
 | `utils.ts` | `formatInr()`, `usdToInr()` (₹83.5/USD), `getAffordability()`, `timeAgo()` |
 | `affiliate.ts` | Affiliate link generators + PostHog stub for SafetyWing, Airalo, Wise, NordVPN |
+| `supabase/client.ts` | Browser-side Supabase client (`createBrowserClient`) |
+| `supabase/server.ts` | Server-side Supabase client with cookie handling |
+
+---
+
+## Auth Setup (Supabase)
+
+- Google OAuth enabled in Supabase dashboard
+- Callback route: `apps/web/src/app/auth/callback/route.ts`
+- Middleware: `apps/web/src/middleware.ts` — protects `/dashboard/*`, redirects logged-in users from `/login`
+- `handle_new_user()` PostgreSQL trigger auto-creates user profile on signup
+- Dashboard shows saved cities with photos
 
 ---
 
 ## Affiliate Integration
 
-| Placement | Partner | Context |
+| Placement | Partner | Commission |
 |---|---|---|
-| Visa result pages | SafetyWing | Travel insurance |
-| Cost calculator result | Airalo | Local eSIM |
-| Any city page | Wise | Money transfer |
-| Job board sidebar | NordVPN | Access Indian services abroad |
+| Visa result page | SafetyWing (travel insurance) | 10% |
+| SIM tab on city pages | Airalo (eSIM) | 10-15% |
+| Cost calculator + city pages | Wise (money transfer) | $15-30/signup |
+| Jobs sidebar | NordVPN | $40-100/signup |
 
 Rules:
 - Never more than 2 affiliate CTAs per page
-- Always labeled "We may earn a commission"
+- Always labeled "sponsored" or "We may earn a commission"
 - All links: `target="_blank" rel="noopener noreferrer"`
-- Track with PostHog `affiliate_click` event (stub ready in `affiliate.ts`)
+- Track with PostHog `affiliate_click` event (stub in `affiliate.ts`)
+
+---
+
+## City Photos
+
+- City images stored in `image_url` column in Supabase `cities` table
+- API tries Teleport API first → falls back to curated Unsplash URLs (`apps/api/src/lib/city-images.ts`)
+- Teleport API works in production (blocked on localhost)
+- `next.config.mjs` has `images.unsplash.com` and `*.teleport.org` in remote patterns
 
 ---
 
@@ -189,23 +224,17 @@ Rules:
 ```bash
 # apps/web/.env.local
 NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_SUPABASE_URL=https://txpwsomujczeoujdnizb.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
 
-# Phase 3 — Supabase
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-
-# Phase 3 — External APIs
-TRAVEL_BUDDY_API_KEY=
-NUMBEO_API_KEY=
+# apps/api/.env
+PORT=3001
+SUPABASE_URL=https://txpwsomujczeoujdnizb.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<service role key>
 
 # Phase 4 — Payments
 RAZORPAY_KEY_ID=
 RAZORPAY_KEY_SECRET=
-
-# Phase 3 — Cache
-UPSTASH_REDIS_URL=
-UPSTASH_REDIS_TOKEN=
 
 # Phase 4 — Email
 RESEND_API_KEY=
@@ -223,46 +252,71 @@ NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 - [x] pnpm monorepo + Turborepo scaffold
 - [x] `packages/types` — shared Zod schemas
 - [x] Hono API with mock seed data (20 cities, 17 visas, 25 jobs)
-- [x] Next.js 14 with Tailwind design system
+- [x] Next.js 14 with Tailwind light design system
 - [x] Homepage with City Snapshot Widget
 - [x] Visa Checker tool
-- [x] Cost Calculator tool
+- [x] Cost Calculator tool (monthly budget, not salary)
 - [x] Job Board with filters
-- [x] Cities Explorer
+- [x] Cities Explorer (continent + sort filters)
 - [x] City Detail pages (ISR)
 - [x] Affiliate integrations (SafetyWing, Airalo, Wise, NordVPN)
 
-### Phase 2 — Content + SEO (Weeks 4–6)
-- [ ] City guide pages for top 20 destinations (SSG with real content)
-- [ ] Blog: 5 SEO articles (visa-free countries, cost in Bali, etc.)
-- [ ] `sitemap.xml` + `robots.txt`
-- [ ] OpenGraph images for all pages
-- [ ] Google Search Console setup
+### Phase 2 — Content + SEO ✅ COMPLETE
+- [x] Blog with 5 SEO articles
+- [x] `sitemap.xml` + `robots.txt`
+- [x] OpenGraph images for city and blog pages
+- [x] City photos via Teleport API + Unsplash fallbacks
 
-**Goal:** 100 organic visitors/month from Google.
+### Phase 3 — Auth + Database ✅ COMPLETE
+- [x] Supabase Auth with Google OAuth + magic link (passwordless)
+- [x] Supabase DB seeded (cities, visas, jobs, users, saved_cities)
+- [x] Saved cities feature (auth required)
+- [x] User dashboard with saved cities + quick links
+- [x] `handle_new_user()` trigger for auto profile creation
+- [x] Middleware for route protection
 
-### Phase 3 — Jobs + Auth (Weeks 7–9)
-- [ ] Supabase Auth + Google OAuth
-- [ ] Replace mock data with real Supabase DB
-- [ ] Wire up RemoteOK API + WeWorkRemotely RSS
-- [ ] Wire up Numbeo API for city cost data
-- [ ] Saved cities feature (auth required)
-- [ ] User dashboard
+### Phase 3.5 — Rebrand ✅ COMPLETE
+- [x] Renamed from Nomadly → Wanderbase across entire codebase
+- [x] Logo updated: "W" with indigo→violet gradient in Navbar, Footer, Login, Signup
+- [x] Removed all "India-first", "Built for Indians", "Free tool" copy
+- [x] Removed hardcoded numbers ("20 cities", "3 steps")
+- [x] Light theme design system (white cards, indigo primary, warm white background)
+- [x] GitHub repo: github.com/mokshith-vr/wanderbase
 
-**Goal:** 50 registered users.
+### Phase 4 — Full Nomad Companion (NEXT)
+**Goal:** Make the app useful WHILE living in a city, not just for planning.
 
-### Phase 4 — Premium (Weeks 10–12)
-- [ ] Razorpay subscription (₹299/month)
-- [ ] Premium: job alerts, advanced salary comparison, no ads
-- [ ] Email system (Resend) for job match alerts
-- [ ] Upstash Redis caching layer
+#### 4A — Enhanced City Pages (tabbed layout)
+- [ ] Redesign city detail page as tabbed interface
+  - Tabs: Overview | Visa | Costs | Neighborhoods | Coworking | SIM & Internet | Transport
+  - Tab state in URL params (`?tab=coworking`) for shareability
+- [ ] Add `Neighborhood` data type — name, vibe, avg rent, pros/cons
+- [ ] Add `CoworkingSpace` data type — name, price/day, WiFi, address, booking URL
+- [ ] Add `SimOption` data type — carrier, plan, cost, where to buy, affiliate flag
+- [ ] Add `CityTransport` data type — apps, monthly pass, scooter rental, notes
+- [ ] Seed new data for top 5 cities: Chiang Mai, Bali, Tbilisi, Lisbon, Kuala Lumpur
+- [ ] Add Coworker.com affiliate to coworking tab
+- [ ] Airalo affiliate card in SIM tab
 
-**Goal:** 5 paying users = ₹1,495 MRR.
+#### 4B — Monetization
+- [ ] Coworking space partnerships (featured listings)
+- [ ] Premium subscription ₹299/mo via Razorpay
+  - Premium unlocks: neighborhood deep-dives, coworking deals, SIM guides, job alerts
+  - Free users see teaser cards with lock icon
+
+#### 4C — Deploy
+- [ ] Deploy API to Railway
+- [ ] Deploy Web to Vercel
+- [ ] Set production env variables
+- [ ] Update Supabase auth redirect URLs to production domain
 
 ### Phase 5 — Growth (Month 4+)
-- [ ] Direct job listings ($49/post)
-- [ ] Community forum (Supabase Realtime)
-- [ ] City comparison tool
+- [ ] RemoteOK API + WeWorkRemotely RSS for real job data
+- [ ] Teleport/Numbeo integration for live city cost data
+- [ ] City comparison tool (side by side)
+- [ ] Email alerts (Resend) for job matches
+- [ ] Upstash Redis caching layer
+- [ ] Community forum (after 500 users)
 - [ ] Mobile PWA
 - [ ] Refer-a-friend program
 
@@ -270,20 +324,16 @@ NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 
 ## Development Conventions
 
-### Git Branching
-```
-main        → production (auto-deploys to Vercel)
-dev         → staging
-feature/*   → feature branches (PRs to dev)
-fix/*       → bug fixes
-```
+### Git
+- Repo: github.com/mokshith-vr/wanderbase
+- Branch: `main` → production
 
 ### Commit Format
 ```
-feat: add visa checker for Schengen area
-fix: city cost not showing in INR on mobile
-chore: update seed data for Bangkok
-docs: update CLAUDE.md with Phase 2 plan
+feat: add coworking tab to city detail page
+fix: cost calculator showing salary instead of budget
+chore: seed neighborhood data for Chiang Mai
+docs: update CLAUDE.md with Phase 4 plan
 ```
 
 ### Code Rules
@@ -292,88 +342,15 @@ docs: update CLAUDE.md with Phase 2 plan
 - All API responses validated against Zod schemas
 - All affiliate links: `target="_blank" rel="noopener noreferrer"`
 - Mobile-first: test at 375px before 1280px
+- Internal package imports use `@nomadly/types` (do not rename this)
 
 ### Definition of Done
-A feature is done when:
 1. Works on mobile (375px) and desktop (1280px)
-2. Has a loading state (skeleton — never blank)
-3. Has an error state (message + retry button)
-4. Has an empty state (helpful message + action)
-5. Affiliate link tracked with PostHog event stub
+2. Has loading state (skeleton — never blank)
+3. Has error state (message + retry button)
+4. Has empty state (helpful message + action)
+5. Affiliate links tracked with PostHog event stub
 6. No TypeScript errors (`pnpm typecheck`)
-
----
-
-## Database Schema (Phase 3)
-
-```sql
-create table cities (
-  id uuid primary key default gen_random_uuid(),
-  slug text unique not null,
-  name text not null,
-  country text not null,
-  country_code text not null,
-  continent text not null,
-  monthly_rent_usd integer,
-  monthly_food_usd integer,
-  monthly_transport_usd integer,
-  monthly_utilities_usd integer,
-  monthly_total_budget_usd integer,
-  internet_speed_mbps integer,
-  safety_score integer,
-  english_proficiency text,
-  coworking_count integer,
-  timezone text,
-  currency_code text,
-  updated_at timestamptz default now()
-);
-
-create table visa_requirements (
-  id uuid primary key default gen_random_uuid(),
-  passport_country_code text not null,
-  destination_country_code text not null,
-  visa_type text not null,
-  max_stay_days integer,
-  evisa_link text,
-  embassy_link text,
-  notes text,
-  last_verified_at timestamptz default now(),
-  unique(passport_country_code, destination_country_code)
-);
-
-create table jobs (
-  id uuid primary key default gen_random_uuid(),
-  title text not null,
-  company text not null,
-  location_type text not null,
-  india_friendly boolean default true,
-  salary_min_usd integer,
-  salary_max_usd integer,
-  tech_stack text[],
-  job_url text not null,
-  source text not null,
-  is_featured boolean default false,
-  posted_at timestamptz,
-  expires_at timestamptz,
-  created_at timestamptz default now()
-);
-
-create table users (
-  id uuid primary key default gen_random_uuid(),
-  email text unique not null,
-  name text,
-  current_salary_inr integer,
-  is_premium boolean default false,
-  premium_expires_at timestamptz,
-  created_at timestamptz default now()
-);
-
-create table saved_cities (
-  user_id uuid references users(id) on delete cascade,
-  city_id uuid references cities(id) on delete cascade,
-  primary key (user_id, city_id)
-);
-```
 
 ---
 
@@ -381,19 +358,8 @@ create table saved_cities (
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Wrong visa data → user denied at airport | **Critical** | Always show "Last verified" date, embassy link, disclaimer, "Report incorrect info" button |
-| Numbeo API cost at scale | Medium | 7-day cache TTL, seed top 50 cities manually |
-| Job scraper gets blocked | Medium | Start with RemoteOK official API + WeWorkRemotely RSS |
-| Empty job board | High | Never show zero jobs — always seed from RSS |
-| User acquisition | High | SEO city pages + Indian tech Twitter + ProductHunt |
-
----
-
-## What NOT to Build (Phase 1–2)
-
-- ❌ Mobile app (PWA is enough for Year 1)
-- ❌ AI chatbot
-- ❌ Accommodation booking
-- ❌ Flight search
-- ❌ Community forum (do after 500 users)
-- ❌ Non-Indian passport support (do after 10,000 Indian MAU)
+| Wrong visa data → user denied at airport | **Critical** | Always show "Last verified" date, embassy link, disclaimer, "Report error" button |
+| Teleport API blocked locally | Low | Falls back to Unsplash URLs. Works in production. |
+| Empty job board | High | Always seed from mock data; RSS in Phase 5 |
+| User acquisition | High | SEO city pages + ProductHunt launch |
+| Coworking data going stale | Medium | Show "last updated" date, allow user reports |
