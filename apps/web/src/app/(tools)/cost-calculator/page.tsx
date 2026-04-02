@@ -405,10 +405,7 @@ export default function CostCalculatorPage() {
 
           {/* Cost breakdown */}
           <div className="card p-6 space-y-4">
-            <div className="flex items-baseline justify-between">
-              <h3 className="font-bold text-text-primary">Cost breakdown</h3>
-              <span className="text-[10px] text-text-muted">Source: Numbeo · verified 2025</span>
-            </div>
+            <h3 className="font-bold text-text-primary">Cost breakdown</h3>
             {results.costItems.map((item) => (
               <div key={item.label}>
                 <div className="flex justify-between mb-1.5">
@@ -449,7 +446,7 @@ export default function CostCalculatorPage() {
               </span>.
             </p>
             <p className="text-[11px] text-text-muted">
-              Cost figures from Numbeo city averages. Coworking estimated from local market rates. Accommodation not included — see options above.
+              Coworking estimated from local market rates. Accommodation shown separately above.
             </p>
           </div>
 

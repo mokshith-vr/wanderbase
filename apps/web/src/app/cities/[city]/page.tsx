@@ -180,7 +180,7 @@ export default async function CityPage({ params }: PageProps) {
               </div>
 
               <p className="text-text-muted text-xs">
-                Source: Numbeo · Updated{" "}
+                Last updated{" "}
                 {new Date(city.updated_at).toLocaleDateString("en-IN", {
                   month: "long",
                   year: "numeric",
