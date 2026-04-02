@@ -192,8 +192,8 @@ export default async function CityPage({ params }: PageProps) {
             </div>
 
             <p className="text-[11px] text-text-muted mt-3">
-              Living costs include food, transport, SIM, utilities & coworking.
-              Accommodation based on typical {city.name} rates.
+              Living costs = food + transport + SIM + utilities + coworking (not accommodation).
+              Total/mo = living costs + accommodation combined.
             </p>
           </div>
         </div>
