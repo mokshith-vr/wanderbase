@@ -101,71 +101,109 @@ export default async function CityPage({ params }: PageProps) {
         <SaveCityButton cityId={city.id} />
       </div>
 
-      {/* ── BUDGET RANGE WIDGET ─────────────────────────────── */}
-      <div className="card p-5 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-bold text-text-primary">💰 What will it cost me?</h2>
-          <Link href={`/cost-calculator`} className="text-xs text-primary hover:underline">
-            Personalise →
-          </Link>
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { emoji: "🎒", label: "Backpacker", sublabel: "Hostel + street food", inr: budgets.backpacker, color: "bg-success/10 border-success/20 text-success" },
-            { emoji: "⚖️", label: "Balanced", sublabel: "Shared flat + mix", inr: budgets.balanced, color: "bg-primary/10 border-primary/20 text-primary", popular: true },
-            { emoji: "🛋️", label: "Comfortable", sublabel: "1BHK + restaurants", inr: budgets.comfortable, color: "bg-warning/10 border-warning/20 text-warning" },
-          ].map((s) => (
-            <div key={s.label} className={`relative rounded-xl border p-3 text-center ${s.color.split(" ").slice(0, 2).join(" ")}`}>
-              {s.popular && (
-                <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
-                  Most common
-                </span>
-              )}
-              <p className="text-lg mb-0.5">{s.emoji}</p>
-              <p className="text-xs font-bold text-text-primary">{s.label}</p>
-              <p className="text-base font-black text-text-primary mt-1">{formatInr(s.inr)}</p>
-              <p className="text-[10px] text-text-muted mt-0.5">/mo excl. accommodation</p>
-              <p className="text-[10px] text-text-muted">{s.sublabel}</p>
-            </div>
-          ))}
-        </div>
-        <p className="text-[11px] text-text-muted mt-3 text-center">
-          Excludes accommodation — see options below. Includes food, transport, SIM, utilities{" "}
-          {budgets.balanced > budgets.backpacker ? "and coworking" : ""}.
-        </p>
-      </div>
-
-      {/* ── ACCOMMODATION OPTIONS ───────────────────────────── */}
+      {/* ── COMBINED COST + STAY WIDGET ─────────────────────── */}
       <section className="mb-8">
-        <h2 className="text-xl font-bold text-text-primary mb-4">🏡 Where to stay</h2>
+        <div className="rounded-2xl overflow-hidden" style={{
+          background: "linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #F0FDF4 100%)",
+          border: "1px solid #E5E7EB"
+        }}>
+          <div className="px-5 pt-5 pb-5">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-[11px] font-semibold text-primary uppercase tracking-widest mb-0.5">Full monthly cost</p>
+                <h2 className="text-lg font-black text-text-primary tracking-tight">What will I spend in {city.name}?</h2>
+              </div>
+              <Link href="/cost-calculator" className="text-xs text-primary hover:underline font-medium">
+                Personalise →
+              </Link>
+            </div>
 
-        {/* Tier summary */}
-        {acc && (
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="bg-surface-2 rounded-xl p-4 border border-border text-center">
-              <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">🎒 Budget</p>
-              <p className="text-base font-black text-text-primary">{formatInr(usdToInr(acc.hostel_per_night_usd * 30))}</p>
-              <p className="text-[11px] text-text-muted mt-0.5">Hostel private room</p>
-              <p className="text-[11px] text-success font-medium mt-1">{formatUsd(acc.hostel_per_night_usd)}/night</p>
+            {/* 3 style columns */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                {
+                  label: "Backpacker",
+                  living: budgets.backpacker,
+                  accInr: acc ? usdToInr(acc.hostel_per_night_usd * 30) : null,
+                  accLabel: "Hostel room",
+                  dot: "bg-success",
+                  border: "border-success/25",
+                  bg: "bg-white/70",
+                  livingNote: "Street food · café WiFi",
+                },
+                {
+                  label: "Balanced",
+                  living: budgets.balanced,
+                  accInr: acc ? usdToInr(acc.airbnb_monthly_usd) : null,
+                  accLabel: acc?.airbnb_available ? "Airbnb / flat" : "Guesthouse",
+                  dot: "bg-primary",
+                  border: "border-primary/30",
+                  bg: "bg-white/90",
+                  popular: true,
+                  livingNote: "Mix of cooking & restaurants",
+                },
+                {
+                  label: "Comfortable",
+                  living: budgets.comfortable,
+                  accInr: acc ? usdToInr(acc.apartment_monthly_usd) : null,
+                  accLabel: "1BHK lease",
+                  dot: "bg-warning",
+                  border: "border-warning/25",
+                  bg: "bg-white/70",
+                  livingNote: "Mostly restaurants",
+                },
+              ].map((s) => (
+                <div key={s.label} className={`relative rounded-xl border ${s.border} ${s.bg} p-3 flex flex-col`}>
+                  {s.popular && (
+                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full font-bold whitespace-nowrap shadow-sm">
+                      Most common
+                    </span>
+                  )}
+                  <div className={`w-2 h-2 rounded-full ${s.dot} mb-2`} />
+                  <p className="text-[11px] font-bold text-text-secondary">{s.label}</p>
+
+                  {/* Living costs row */}
+                  <div className="mt-2 space-y-1">
+                    <div className="flex justify-between items-baseline">
+                      <p className="text-[10px] text-text-muted">Living costs</p>
+                      <p className="text-sm font-bold text-text-primary">{formatInr(s.living)}</p>
+                    </div>
+                    {s.accInr && (
+                      <div className="flex justify-between items-baseline">
+                        <p className="text-[10px] text-text-muted">{s.accLabel}</p>
+                        <p className="text-sm font-bold text-text-primary">{formatInr(s.accInr)}</p>
+                      </div>
+                    )}
+                    {s.accInr && (
+                      <div className="flex justify-between items-baseline border-t border-border/50 pt-1 mt-1">
+                        <p className="text-[10px] font-semibold text-text-secondary">Total/mo</p>
+                        <p className="text-base font-black text-text-primary">{formatInr(s.living + s.accInr)}</p>
+                      </div>
+                    )}
+                    {!s.accInr && (
+                      <p className="text-base font-black text-text-primary mt-1">{formatInr(s.living)}</p>
+                    )}
+                  </div>
+
+                  <p className="text-[10px] text-text-muted mt-2 leading-tight">{s.livingNote}</p>
+                </div>
+              ))}
             </div>
-            <div className="bg-surface-2 rounded-xl p-4 border border-primary/30 text-center relative">
-              <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[9px] bg-primary text-white px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">Popular</span>
-              <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">⚖️ Balanced</p>
-              <p className="text-base font-black text-text-primary">{formatInr(usdToInr(acc.airbnb_monthly_usd))}</p>
-              <p className="text-[11px] text-text-muted mt-0.5">{acc.airbnb_available ? "Airbnb / serviced apt" : "Guesthouse / hotel"}</p>
-              <p className="text-[11px] text-success font-medium mt-1">/month</p>
-            </div>
-            <div className="bg-surface-2 rounded-xl p-4 border border-border text-center">
-              <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wide mb-1">🛋️ Comfort</p>
-              <p className="text-base font-black text-text-primary">{formatInr(usdToInr(acc.apartment_monthly_usd))}</p>
-              <p className="text-[11px] text-text-muted mt-0.5">1BHK furnished lease</p>
-              <p className="text-[11px] text-success font-medium mt-1">/month</p>
-            </div>
+
+            <p className="text-[11px] text-text-muted mt-3">
+              Living costs include food, transport, SIM, utilities & coworking.
+              Accommodation based on typical {city.name} rates.
+            </p>
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* Real hostel + coliving listings */}
-        {colivingOptions.length > 0 && (
+      {/* ── WHERE TO STAY ───────────────────────────────────── */}
+      <section className="mb-8">
+        <h2 className="text-xl font-bold text-text-primary mb-4">Where to stay</h2>
+
+        {colivingOptions.length > 0 ? (
           <div className="space-y-2">
             {colivingOptions.map((opt) => (
               <a
@@ -175,12 +213,9 @@ export default async function CityPage({ params }: PageProps) {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 p-4 rounded-xl border border-border hover:border-primary/30 bg-surface hover:bg-primary/5 transition-all group"
               >
-                {/* Icon */}
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-surface-2 flex items-center justify-center text-lg">
                   {opt.type === "coliving" ? "🏘️" : opt.type === "hostel" ? "🛏️" : "🏠"}
                 </div>
-
-                {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-semibold text-sm text-text-primary group-hover:text-primary">{opt.name}</p>
@@ -189,36 +224,27 @@ export default async function CityPage({ params }: PageProps) {
                       opt.type === "hostel" ? "bg-success/10 text-success" :
                       "bg-warning/10 text-warning"
                     }`}>{opt.type}</span>
-                    {opt.includes_desk && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-2 text-text-muted">desk ✓</span>
-                    )}
-                    {opt.wifi_mbps && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-2 text-text-muted">{opt.wifi_mbps} Mbps</span>
-                    )}
+                    {opt.includes_desk && <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-2 text-text-muted">desk ✓</span>}
+                    {opt.wifi_mbps && <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-2 text-text-muted">{opt.wifi_mbps} Mbps</span>}
                   </div>
                   <p className="text-[11px] text-text-muted mt-0.5">{opt.neighborhood} · {opt.highlight}</p>
                 </div>
-
-                {/* Price + Book */}
                 <div className="flex-shrink-0 text-right">
                   <p className="text-sm font-black text-text-primary">
                     {opt.price_per_month_usd
                       ? <>{formatInr(usdToInr(opt.price_per_month_usd))}<span className="text-[10px] font-normal text-text-muted">/mo</span></>
                       : opt.price_per_night_usd
                       ? <>{formatInr(usdToInr(opt.price_per_night_usd))}<span className="text-[10px] font-normal text-text-muted">/night</span></>
-                      : null
-                    }
+                      : null}
                   </p>
                   <span className="text-[10px] text-primary font-medium">Book ↗</span>
                 </div>
               </a>
             ))}
           </div>
-        )}
-
-        {!acc && colivingOptions.length === 0 && (
+        ) : (
           <div className="card p-6 text-center text-text-muted text-sm">
-            Accommodation data coming soon for {city.name}.
+            Accommodation listings coming soon for {city.name}.
           </div>
         )}
 
